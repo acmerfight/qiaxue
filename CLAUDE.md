@@ -35,3 +35,16 @@ fix(utils): 修复时间格式化函数bug
 docs: 更新README文档
 style(components): 调整按钮组件样式
 ```
+
+# 微信小程序特殊配置说明
+
+## TypeScript 配置 - 无需关注的问题
+- **无需安装 typescript 包** - 微信开发者工具内置 TypeScript 编译器
+- **无需 outDir/rootDir** - 微信开发者工具自动处理编译输出
+- **无需复杂的模块解析配置** - 小程序有自己的模块系统
+- **当前 tsconfig.json 已足够严格** - 已启用 strict 模式和各种检查
+
+## 已配置完善的部分
+- project.config.json 已启用 typescript 插件
+- typings 目录提供完整的微信 API 类型定义
+- miniprogram-api-typings 提供官方类型支持
