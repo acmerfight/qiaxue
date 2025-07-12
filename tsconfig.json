@@ -25,7 +25,6 @@
     "./**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "miniprogram/libs/**"
+    "node_modules"
   ]
 }
