@@ -1,11 +1,14 @@
 {
-  "name": "miniprogram-ts-quickstart",
+  "name": "qiaxue",
   "version": "1.0.0",
-  "description": "",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "",
+  "description": "恰学微信小程序",
+  "scripts": {
+    "dev": "微信开发者工具编译和预览",
+    "build": "微信开发者工具构建上传"
+  },
+  "keywords": ["微信小程序", "typescript", "ccstate"],
+  "author": "yaogangqiang",
+  "license": "MIT",
   "dependencies": {
     "ccstate": "^5.0.0"
   },
