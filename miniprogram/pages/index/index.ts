@@ -3,6 +3,13 @@
 const app = getApp<IAppOption>()
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 
+// 引入 ccstate
+import { createStore, state } from '../../libs/ccstate/index.js'
+
+// 创建状态管理
+const store = createStore()
+const mottoState = state('Hello CCState')
+
 Component({
   data: {
     motto: 'Hello World',
@@ -17,6 +24,11 @@ Component({
   methods: {
     // 事件处理函数
     bindViewTap() {
+      // 测试 ccstate
+      store.set(mottoState, 'CCState 引入成功！')
+      const newMotto = store.get(mottoState)
+      this.setData({ motto: newMotto })
+      
       wx.navigateTo({
         url: '../logs/logs',
       })
