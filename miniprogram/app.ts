@@ -1,5 +1,4 @@
 // app.ts
-/// <reference path="../typings/index.d.ts" />
 import { createStore, state } from 'ccstate'
 
 // 全局状态管理
