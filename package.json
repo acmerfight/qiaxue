@@ -6,13 +6,18 @@
     "dev": "微信开发者工具编译和预览",
     "build": "微信开发者工具构建上传"
   },
-  "keywords": ["微信小程序", "typescript", "ccstate"],
+  "keywords": [
+    "微信小程序",
+    "typescript",
+    "ccstate"
+  ],
   "author": "yaogangqiang",
   "license": "MIT",
   "dependencies": {
     "ccstate": "^5.0.0"
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^4.0.7"
+    "miniprogram-api-typings": "^4.0.7",
+    "typescript": "^5.8.3"
   }
 }

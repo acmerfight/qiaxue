@@ -1,4 +1,5 @@
 // app.ts
+/// <reference path="../typings/index.d.ts" />
 import { createStore, state } from 'ccstate'
 
 // 全局状态管理
@@ -18,10 +19,11 @@ App<IAppOption>({
 
     // 登录
     wx.login({
-      success: res => {
+      success: (res) => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log('登录成功，code:', res.code)
       },
-      fail: err => {
+      fail: (err) => {
         console.error('登录失败:', err)
       }
     })

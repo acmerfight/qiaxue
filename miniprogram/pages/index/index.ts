@@ -1,4 +1,5 @@
 // index.ts
+/// <reference path="../../../typings/index.d.ts" />
 // 获取应用实例
 const app = getApp<IAppOption>()
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
@@ -39,12 +40,12 @@ Page({
     })
   },
 
-  onChooseAvatar(e: WechatMiniprogram.ChooseAvatarEventDetail) {
+  onChooseAvatar(e: WechatMiniprogram.CustomEvent<{avatarUrl: string}>) {
     const { avatarUrl } = e.detail
     const { nickName } = this.data.userInfo
     this.setData({
       "userInfo.avatarUrl": avatarUrl,
-      hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      hasUserInfo: !!(nickName && avatarUrl && avatarUrl !== defaultAvatarUrl),
     })
   },
 
@@ -53,7 +54,7 @@ Page({
     const { avatarUrl } = this.data.userInfo
     this.setData({
       "userInfo.nickName": nickName,
-      hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      hasUserInfo: !!(nickName && avatarUrl && avatarUrl !== defaultAvatarUrl),
     })
   },
 
