@@ -61,40 +61,23 @@
   color: #ff4757;
 }
 
-.picker-container {
-  position: relative;
-}
-
-.picker {
+.subject-display {
   width: 100%;
   padding: 24rpx;
   border: 2rpx solid #e1e8ed;
   border-radius: 12rpx;
   font-size: 28rpx;
   color: #333;
-  background-color: #fff;
+  background-color: #f8f9fa;
   box-sizing: border-box;
   min-height: 88rpx;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.picker:focus {
-  border-color: #007aff;
-}
-
-.picker.error {
-  border-color: #ff4757;
-}
-
-.picker-placeholder {
-  color: #8e8e93;
-}
-
-.picker-arrow {
-  color: #8e8e93;
-  font-size: 24rpx;
+.subject-text {
+  color: #007aff;
+  font-weight: 500;
 }
 
 .error-message {

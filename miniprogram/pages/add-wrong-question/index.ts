@@ -3,8 +3,7 @@
  */
 
 import { 
-  Subject, 
-  SUBJECT_NAMES
+  Subject
 } from '../../types/wrongQuestion'
 import {
   loadingState,
@@ -17,28 +16,21 @@ import { globalStore } from '../../store/index'
 
 interface FormData {
   content: string
-  subject: Subject | ''
+  subject: Subject
 }
 
-interface SelectOption {
-  value: string
-  name: string
-}
 
 Page({
   data: {
     formData: {
       content: '',
-      subject: ''
+      subject: Subject.MATH
     } as FormData,
-    selectedSubjectIndex: -1,
-    subjectOptions: [] as SelectOption[],
     isLoading: false,
     validationErrors: {} as WrongQuestionValidationError
   },
 
   onLoad(): void {
-    this.initializeOptions()
     this.bindStateToData()
   },
 
@@ -47,20 +39,6 @@ Page({
     clearValidationErrors()
   },
 
-  /**
-   * 初始化选择器选项
-   */
-  initializeOptions(): void {
-    // 学科选项
-    const subjectOptions = Object.values(Subject).map(subject => ({
-      value: subject,
-      name: SUBJECT_NAMES[subject]
-    }))
-
-    this.setData({
-      subjectOptions
-    })
-  },
 
   /**
    * 绑定状态到页面数据
@@ -95,25 +73,6 @@ Page({
     }
   },
 
-  /**
-   * 学科选择处理
-   */
-  onSubjectChange(event: WechatMiniprogram.PickerChange) {
-    const index = parseInt(event.detail.value as string)
-    const subject = this.data.subjectOptions[index]?.value as Subject
-
-    this.setData({
-      selectedSubjectIndex: index,
-      'formData.subject': subject
-    })
-
-    // 清除学科验证错误
-    const errors = { ...this.data.validationErrors }
-    if (errors.subject) {
-      delete errors.subject
-      this.setData({ validationErrors: errors })
-    }
-  },
 
 
   /**

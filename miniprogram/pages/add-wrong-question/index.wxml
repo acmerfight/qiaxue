@@ -21,29 +21,13 @@
       </view>
     </view>
 
-    <!-- 学科选择 -->
+    <!-- 学科显示 -->
     <view class="form-group">
       <view class="label">
-        学科 <text class="required">*</text>
+        学科
       </view>
-      <view class="picker-container">
-        <picker 
-          mode="selector" 
-          range="{{subjectOptions}}" 
-          range-key="name"
-          value="{{selectedSubjectIndex}}"
-          bindchange="onSubjectChange"
-        >
-          <view class="picker {{validationErrors.subject ? 'error' : ''}}">
-            <text class="{{selectedSubjectIndex === -1 ? 'picker-placeholder' : ''}}">
-              {{selectedSubjectIndex === -1 ? '请选择学科' : subjectOptions[selectedSubjectIndex].name}}
-            </text>
-            <text class="picker-arrow">▼</text>
-          </view>
-        </picker>
-      </view>
-      <view class="error-message" wx:if="{{validationErrors.subject}}">
-        {{validationErrors.subject}}
+      <view class="subject-display">
+        <text class="subject-text">数学</text>
       </view>
     </view>
 
