@@ -4,6 +4,8 @@ declare global {
   interface IAppOption {
     globalData: {
       userInfo?: WechatMiniprogram.UserInfo,
+      store?: any,
+      mottoState?: any,
     }
     userInfoReadyCallback?: WechatMiniprogram.GetUserInfoSuccessCallback,
   }

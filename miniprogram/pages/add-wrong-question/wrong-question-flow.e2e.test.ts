@@ -50,7 +50,7 @@ describe('错题录入完整用户流程', () => {
 
       // And: 错题出现在列表中
       expect(getWrongQuestionCount()).toBe(1)
-      const questions = globalStore.get(wrongQuestionsState)
+      const questions = globalStore.get(wrongQuestionsState) as any[]
       expect(questions[0]).toEqual(savedQuestion)
 
       // And: 数据持久化到本地
@@ -166,7 +166,7 @@ describe('错题录入完整用户流程', () => {
 
       // Then: 新错题添加到列表开头
       expect(getWrongQuestionCount()).toBe(3)
-      const questions = globalStore.get(wrongQuestionsState)
+      const questions = globalStore.get(wrongQuestionsState) as any[]
       expect(questions[0]).toEqual(newQuestion)
       expect(questions[0].subject).toBe(Subject.ENGLISH)
     })
@@ -199,7 +199,7 @@ describe('错题录入完整用户流程', () => {
       })
 
       // Then: 错题按时间倒序排列（最新的在前）
-      const questions = globalStore.get(wrongQuestionsState)
+      const questions = globalStore.get(wrongQuestionsState) as any[]
       expect(questions[0]).toEqual(question3) // 最新
       expect(questions[1]).toEqual(question2) // 中间
       expect(questions[2]).toEqual(question1) // 最早
@@ -226,7 +226,7 @@ describe('错题录入完整用户流程', () => {
 
       // Then: 错题数据成功恢复
       expect(getWrongQuestionCount()).toBe(1)
-      const questions = globalStore.get(wrongQuestionsState)
+      const questions = globalStore.get(wrongQuestionsState) as any[]
       expect(questions[0]).toEqual(originalQuestion)
     })
 
