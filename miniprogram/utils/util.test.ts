@@ -1,0 +1,74 @@
+/**
+ * util.ts 单元测试
+ * 测试时间格式化功能
+ */
+
+import { formatTime, formatNumber } from './util'
+
+describe('formatTime', () => {
+  test('应该正确格式化标准时间', () => {
+    const date = new Date(2023, 11, 25, 14, 30, 45) // 2023年12月25日 14:30:45
+    const result = formatTime(date)
+    expect(result).toBe('2023/12/25 14:30:45')
+  })
+
+  test('应该为单位数字补零', () => {
+    const date = new Date(2023, 0, 5, 9, 8, 7) // 2023年1月5日 09:08:07
+    const result = formatTime(date)
+    expect(result).toBe('2023/01/05 09:08:07')
+  })
+
+  test('应该正确处理午夜时间', () => {
+    const date = new Date(2023, 5, 15, 0, 0, 0) // 2023年6月15日 00:00:00
+    const result = formatTime(date)
+    expect(result).toBe('2023/06/15 00:00:00')
+  })
+
+  test('应该正确处理年末时间', () => {
+    const date = new Date(2023, 11, 31, 23, 59, 59) // 2023年12月31日 23:59:59
+    const result = formatTime(date)
+    expect(result).toBe('2023/12/31 23:59:59')
+  })
+
+  test('应该正确处理闰年2月29日', () => {
+    const date = new Date(2024, 1, 29, 12, 0, 0) // 2024年2月29日 12:00:00
+    const result = formatTime(date)
+    expect(result).toBe('2024/02/29 12:00:00')
+  })
+
+  test('应该返回字符串类型', () => {
+    const date = new Date(2023, 5, 15, 10, 30, 45)
+    const result = formatTime(date)
+    expect(typeof result).toBe('string')
+  })
+
+  test('应该包含正确的分隔符', () => {
+    const date = new Date(2023, 5, 15, 10, 30, 45)
+    const result = formatTime(date)
+    expect(result).toMatch(/\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}/)
+  })
+})
+
+describe('formatNumber', () => {
+  test('应该为单位数字补零', () => {
+    expect(formatNumber(5)).toBe('05')
+    expect(formatNumber(0)).toBe('00')
+    expect(formatNumber(9)).toBe('09')
+  })
+
+  test('应该保持两位数不变', () => {
+    expect(formatNumber(10)).toBe('10')
+    expect(formatNumber(25)).toBe('25')
+    expect(formatNumber(99)).toBe('99')
+  })
+
+  test('应该处理大于两位数的数字', () => {
+    expect(formatNumber(100)).toBe('100')
+    expect(formatNumber(999)).toBe('999')
+  })
+
+  test('应该返回字符串类型', () => {
+    expect(typeof formatNumber(5)).toBe('string')
+    expect(typeof formatNumber(15)).toBe('string')
+  })
+})

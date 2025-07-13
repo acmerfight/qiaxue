@@ -37,4 +37,10 @@ Thumbs.db
 
 # 微信小程序特定
 miniprogram_npm/
-node_modules/
+
+# Jest 测试相关
+coverage/
+*.lcov
+
+# TypeScript 编译
+*.tsbuildinfo

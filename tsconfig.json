@@ -19,13 +19,18 @@
     "skipLibCheck": true,
     "lib": ["ES2020"],
     "typeRoots": [
-      "./typings"
-    ]
+      "./typings",
+      "./node_modules/@types"
+    ],
+    "types": ["jest", "node"]
   },
   "include": [
     "./**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "coverage",
+    "jest.config.js",
+    "jest.setup.js"
   ]
 }
