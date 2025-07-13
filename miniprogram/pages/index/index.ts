@@ -3,8 +3,7 @@ import {
   setUserInfo, 
   updateUserAvatar, 
   getUserInfo, 
-  checkHasUserInfo,
-  type UserInfo 
+  checkHasUserInfo
 } from '../../store/userStore'
 
 // 获取应用实例
@@ -44,8 +43,8 @@ Component({
       
       // 获取motto状态
       const globalData = app.globalData
-      if (globalData.store && globalData.mottoState) {
-        const motto = globalData.store.get<string>(globalData.mottoState)
+      if (globalData.store) {
+        const motto = globalData.store.get('motto')
         this.setData({ motto })
       }
     },
@@ -54,9 +53,9 @@ Component({
     bindViewTap() {
       // 使用全局状态管理
       const globalData = app.globalData
-      if (globalData.store && globalData.mottoState) {
-        globalData.store.set(globalData.mottoState, '简单状态管理成功！')
-        const newMotto = globalData.store.get<string>(globalData.mottoState)
+      if (globalData.store) {
+        globalData.store.set('motto', '简单状态管理成功！')
+        const newMotto = globalData.store.get('motto')
         this.setData({ motto: newMotto })
       }
       
@@ -78,7 +77,12 @@ Component({
         if (nickName && avatarUrl !== defaultAvatarUrl) {
           setUserInfo({
             nickName,
-            avatarUrl
+            avatarUrl,
+            city: '',
+            country: '',
+            gender: 0,
+            language: 'zh_CN',
+            province: ''
           })
         }
       }
@@ -115,13 +119,14 @@ Component({
         success: (res) => {
           console.log(res)
           // 使用状态管理保存用户信息
-          const userInfo: UserInfo = {
+          const userInfo: WechatMiniprogram.UserInfo = {
             nickName: res.userInfo.nickName,
             avatarUrl: res.userInfo.avatarUrl,
             gender: res.userInfo.gender,
             city: res.userInfo.city,
             province: res.userInfo.province,
-            country: res.userInfo.country
+            country: res.userInfo.country,
+            language: res.userInfo.language || 'zh_CN'
           }
           setUserInfo(userInfo)
           

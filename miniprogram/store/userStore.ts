@@ -5,19 +5,10 @@
 
 import { globalStore, STATE_KEYS } from './index'
 
-export interface UserInfo {
-  nickName: string
-  avatarUrl: string
-  gender?: number
-  city?: string
-  province?: string
-  country?: string
-}
-
-// 状态键
+// 状态键 - 使用 STATE_KEYS 中定义的常量
 const USER_INFO_KEY = STATE_KEYS.USER_INFO
-const HAS_USER_INFO_KEY = 'hasUserInfo'
-const USER_AUTH_KEY = 'userAuth'
+const HAS_USER_INFO_KEY = STATE_KEYS.HAS_USER_INFO
+const USER_AUTH_KEY = STATE_KEYS.USER_AUTH
 
 // 初始化用户相关状态
 globalStore.set(HAS_USER_INFO_KEY, false)
@@ -26,7 +17,7 @@ globalStore.set(USER_AUTH_KEY, false)
 /**
  * 设置用户信息
  */
-export function setUserInfo(userInfo: UserInfo): void {
+export function setUserInfo(userInfo: WechatMiniprogram.UserInfo): void {
   globalStore.set(USER_INFO_KEY, userInfo)
   globalStore.set(HAS_USER_INFO_KEY, true)
   globalStore.set(USER_AUTH_KEY, true)
@@ -45,7 +36,7 @@ export function clearUserInfo(): void {
  * 更新用户头像
  */
 export function updateUserAvatar(avatarUrl: string): void {
-  const currentUserInfo = globalStore.get<UserInfo | null>(USER_INFO_KEY)
+  const currentUserInfo = globalStore.get(USER_INFO_KEY)
   if (currentUserInfo) {
     globalStore.set(USER_INFO_KEY, {
       ...currentUserInfo,
@@ -57,13 +48,13 @@ export function updateUserAvatar(avatarUrl: string): void {
 /**
  * 获取用户信息
  */
-export function getUserInfo(): UserInfo | null {
-  return globalStore.get<UserInfo | null>(USER_INFO_KEY)
+export function getUserInfo(): WechatMiniprogram.UserInfo | null {
+  return globalStore.get(USER_INFO_KEY)
 }
 
 /**
  * 检查是否有用户信息
  */
 export function checkHasUserInfo(): boolean {
-  return globalStore.get<boolean>(HAS_USER_INFO_KEY)
+  return globalStore.get(HAS_USER_INFO_KEY)
 }
