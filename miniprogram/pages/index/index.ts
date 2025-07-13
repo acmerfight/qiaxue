@@ -45,7 +45,7 @@ Component({
       // 获取motto状态
       const globalData = app.globalData
       if (globalData.store && globalData.mottoState) {
-        const motto = globalData.store.get(globalData.mottoState)
+        const motto = globalData.store.get<string>(globalData.mottoState)
         this.setData({ motto })
       }
     },
@@ -56,7 +56,7 @@ Component({
       const globalData = app.globalData
       if (globalData.store && globalData.mottoState) {
         globalData.store.set(globalData.mottoState, '简单状态管理成功！')
-        const newMotto = globalData.store.get(globalData.mottoState)
+        const newMotto = globalData.store.get<string>(globalData.mottoState)
         this.setData({ motto: newMotto })
       }
       

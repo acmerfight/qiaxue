@@ -9,7 +9,7 @@ interface State<T> {
 }
 
 interface Store {
-  states: Map<string, State<any>>
+  states: Map<string, State<unknown>>
   get<T>(key: string): T
   set<T>(key: string, value: T): void
   watch<T>(key: string, listener: (value: T) => void): () => void
@@ -19,29 +19,29 @@ interface Store {
  * 创建简单状态管理器
  */
 export function createSimpleStore(): Store {
-  const states = new Map<string, State<any>>()
+  const states = new Map<string, State<unknown>>()
 
   return {
     states,
 
     get<T>(key: string): T {
       const state = states.get(key)
-      return state ? state.value : ([] as any)
+      return state ? (state.value as T) : ([] as T)
     },
 
     set<T>(key: string, value: T): void {
-      let state = states.get(key)
+      let state = states.get(key) as State<T> | undefined
       if (!state) {
-        state = { value, listeners: [] }
-        states.set(key, state)
+        state = { value, listeners: [] } as State<T>
+        states.set(key, state as State<unknown>)
       } else {
-        state.value = value
+        (state as State<T>).value = value
       }
       
       // 通知所有监听器
-      state.listeners.forEach(listener => {
+      ;(state as State<T>).listeners.forEach(listener => {
         try {
-          listener(value)
+          (listener as (value: T) => void)(value)
         } catch (error) {
           console.error('状态监听器执行错误:', error)
         }
@@ -49,21 +49,21 @@ export function createSimpleStore(): Store {
     },
 
     watch<T>(key: string, listener: (value: T) => void): () => void {
-      let state = states.get(key)
+      let state = states.get(key) as State<T> | undefined
       if (!state) {
-        state = { value: undefined, listeners: [] }
-        states.set(key, state)
+        state = { value: undefined as unknown as T, listeners: [] } as State<T>
+        states.set(key, state as State<unknown>)
       }
       
-      state.listeners.push(listener)
+      ;(state as State<T>).listeners.push(listener)
       
       // 返回取消监听的函数
       return () => {
-        const currentState = states.get(key)
+        const currentState = states.get(key) as State<T> | undefined
         if (currentState) {
-          const index = currentState.listeners.indexOf(listener)
+          const index = (currentState as State<T>).listeners.indexOf(listener)
           if (index > -1) {
-            currentState.listeners.splice(index, 1)
+            ;(currentState as State<T>).listeners.splice(index, 1)
           }
         }
       }

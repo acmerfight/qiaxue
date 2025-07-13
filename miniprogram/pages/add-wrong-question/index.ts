@@ -86,7 +86,7 @@ Page({
     })
 
     // 验证错误状态
-    globalStore.watch(validationErrorState, (errors: any) => {
+    globalStore.watch(validationErrorState, (errors: WrongQuestionValidationError) => {
       this.setData({ validationErrors: errors })
     })
   },

@@ -3,8 +3,8 @@ import { globalStore, MOTTO_STATE } from './store/index'
 
 App<IAppOption>({
   globalData: {
-    store: globalStore as any,
-    mottoState: MOTTO_STATE as any,
+    store: globalStore,
+    mottoState: MOTTO_STATE,
   },
   onLaunch() {
     // 展示本地存储能力

@@ -51,7 +51,7 @@ Page({
    */
   bindStateToData() {
     // 监听错题列表状态变化
-    globalStore.watch(wrongQuestionsState, (questions: any) => {
+    globalStore.watch(wrongQuestionsState, (questions: WrongQuestion[]) => {
       this.formatAndSetQuestions(questions)
     })
 
