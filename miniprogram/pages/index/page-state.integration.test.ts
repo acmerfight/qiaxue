@@ -10,7 +10,7 @@ import {
   getUserInfo,
   checkHasUserInfo,
   UserInfo
-} from '../store/userStore'
+} from '../../store/userStore'
 
 // 模拟页面行为的辅助函数
 function simulatePageUserFlow() {

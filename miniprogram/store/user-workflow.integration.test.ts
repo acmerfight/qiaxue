@@ -10,7 +10,7 @@ import {
   getUserInfo,
   checkHasUserInfo,
   UserInfo
-} from '../store/userStore'
+} from './userStore'
 
 describe('用户完整操作流程集成测试', () => {
   beforeEach(() => {
