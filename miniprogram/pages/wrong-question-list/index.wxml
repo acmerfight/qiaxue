@@ -28,7 +28,6 @@
       <view class="question-header">
         <view class="question-tags">
           <view class="tag subject">{{item.subjectName}}</view>
-          <view class="tag type">{{item.questionTypeName}}</view>
         </view>
         <view class="question-time">{{item.timeDisplay}}</view>
       </view>

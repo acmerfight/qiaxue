@@ -8,8 +8,7 @@ import {
   CreateWrongQuestionInput, 
   CreateWrongQuestionFormInput,
   WrongQuestionValidationError,
-  Subject,
-  QuestionType
+  Subject
 } from '../types/wrongQuestion'
 
 // 本地存储key
@@ -76,11 +75,6 @@ export function validateWrongQuestionForm(input: CreateWrongQuestionFormInput): 
     errors.subject = '请选择学科'
   }
 
-  // 验证题目类型
-  if (!input.questionType || input.questionType.trim() === '') {
-    errors.questionType = '请选择题目类型'
-  }
-
   return errors
 }
 
@@ -107,8 +101,7 @@ export function addWrongQuestion(input: CreateWrongQuestionFormInput): Promise<W
     // 类型转换：将表单输入转换为有效的错题数据
     const validInput: CreateWrongQuestionInput = {
       content: input.content,
-      subject: input.subject as Subject,
-      questionType: input.questionType as QuestionType
+      subject: input.subject as Subject
     }
 
     // 清除验证错误
@@ -124,7 +117,6 @@ export function addWrongQuestion(input: CreateWrongQuestionFormInput): Promise<W
         id: generateId(),
         content: validInput.content.trim(),
         subject: validInput.subject,
-        questionType: validInput.questionType,
         createdAt: now,
         updatedAt: now
       }

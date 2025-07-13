@@ -3,7 +3,7 @@
  * 测试完整的用户流程：录入 → 列表 → 验证
  */
 
-import { Subject, QuestionType, WrongQuestion, CreateWrongQuestionFormInput } from '../../types/wrongQuestion'
+import { Subject, WrongQuestion, CreateWrongQuestionFormInput } from '../../types/wrongQuestion'
 import {
   wrongQuestionsState,
   addWrongQuestion,
@@ -36,8 +36,7 @@ describe('错题录入完整用户流程', () => {
       // When: 用户填写并提交错题表单
       const wrongQuestionInput = {
         content: '解方程：2x + 3 = 7，我算成了 x = 1，正确答案是 x = 2',
-        subject: Subject.MATH,
-        questionType: QuestionType.EQUATION
+        subject: Subject.MATH
       }
 
       const savedQuestion = await addWrongQuestion(wrongQuestionInput)
@@ -46,7 +45,6 @@ describe('错题录入完整用户流程', () => {
       expect(savedQuestion).toBeDefined()
       expect(savedQuestion.content).toBe(wrongQuestionInput.content)
       expect(savedQuestion.subject).toBe(Subject.MATH)
-      expect(savedQuestion.questionType).toBe(QuestionType.EQUATION)
 
       // And: 错题出现在列表中
       expect(getWrongQuestionCount()).toBe(1)
@@ -59,8 +57,7 @@ describe('错题录入完整用户流程', () => {
         expect.arrayContaining([
           expect.objectContaining({
             content: wrongQuestionInput.content,
-            subject: Subject.MATH,
-            questionType: QuestionType.EQUATION
+            subject: Subject.MATH
           })
         ])
       )
@@ -78,8 +75,7 @@ describe('错题录入完整用户流程', () => {
       // 这里模拟用户完成添加流程
       return addWrongQuestion({
         content: '这是我的第一道错题，关于基础数学计算',
-        subject: Subject.MATH,
-        questionType: QuestionType.CALCULATION
+        subject: Subject.MATH
       }).then(() => {
         // Then: 错题成功添加
         expect(getWrongQuestionCount()).toBe(1)
@@ -91,8 +87,7 @@ describe('错题录入完整用户流程', () => {
     test('用户输入内容少于10字符时看到错误提示', async () => {
       const shortInput = {
         content: '太短了',
-        subject: Subject.MATH,
-        questionType: QuestionType.CHOICE
+        subject: Subject.MATH
       }
 
       try {
@@ -108,8 +103,7 @@ describe('错题录入完整用户流程', () => {
     test('用户未选择学科时看到错误提示', async () => {
       const noSubjectInput = {
         content: '这是一道没有选择学科的错题内容',
-        subject: '' as const,
-        questionType: QuestionType.CHOICE
+        subject: '' as const
       } satisfies CreateWrongQuestionFormInput
 
       try {
@@ -122,22 +116,6 @@ describe('错题录入完整用户流程', () => {
       }
     })
 
-    test('用户未选择题目类型时看到错误提示', async () => {
-      const noTypeInput = {
-        content: '这是一道没有选择题目类型的错题内容',
-        subject: Subject.MATH,
-        questionType: '' as const
-      } satisfies CreateWrongQuestionFormInput
-
-      try {
-        await addWrongQuestion(noTypeInput)
-        fail('应该抛出验证错误')
-      } catch (error) {
-        // Then: 验证失败，不保存数据
-        expect(getWrongQuestionCount()).toBe(0)
-        expect((error as Error).message).toBe('表单验证失败')
-      }
-    })
   })
 
   describe('日常使用流程', () => {
@@ -145,14 +123,12 @@ describe('错题录入完整用户流程', () => {
       // Given: 用户已有2道错题
       await addWrongQuestion({
         content: '第一道历史错题，关于中国古代历史',
-        subject: Subject.HISTORY,
-        questionType: QuestionType.ESSAY
+        subject: Subject.HISTORY
       })
       
       await addWrongQuestion({
         content: '第二道物理错题，关于力学计算',
-        subject: Subject.PHYSICS,
-        questionType: QuestionType.CALCULATION
+        subject: Subject.PHYSICS
       })
 
       expect(getWrongQuestionCount()).toBe(2)
@@ -160,8 +136,7 @@ describe('错题录入完整用户流程', () => {
       // When: 用户添加第三道错题
       const newQuestion = await addWrongQuestion({
         content: '第三道英语错题，关于语法选择',
-        subject: Subject.ENGLISH,
-        questionType: QuestionType.CHOICE
+        subject: Subject.ENGLISH
       })
 
       // Then: 新错题添加到列表开头
@@ -182,20 +157,17 @@ describe('错题录入完整用户流程', () => {
 
       const question1 = await addWrongQuestion({
         content: '最早的错题内容足够长',
-        subject: Subject.MATH,
-        questionType: QuestionType.CHOICE
+        subject: Subject.MATH
       })
 
       const question2 = await addWrongQuestion({
         content: '中间的错题内容足够长',
-        subject: Subject.PHYSICS,
-        questionType: QuestionType.CALCULATION
+        subject: Subject.PHYSICS
       })
 
       const question3 = await addWrongQuestion({
         content: '最新的错题内容足够长',
-        subject: Subject.ENGLISH,
-        questionType: QuestionType.FILL_BLANK
+        subject: Subject.ENGLISH
       })
 
       // Then: 错题按时间倒序排列（最新的在前）
@@ -213,8 +185,7 @@ describe('错题录入完整用户流程', () => {
       // Given: 用户添加了错题
       const originalQuestion = await addWrongQuestion({
         content: '测试持久化的错题内容',
-        subject: Subject.CHINESE,
-        questionType: QuestionType.ESSAY
+        subject: Subject.CHINESE
       })
 
       // When: 模拟应用重启，从存储中恢复数据

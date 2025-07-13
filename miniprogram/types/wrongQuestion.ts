@@ -60,8 +60,6 @@ export interface WrongQuestion {
   content: string
   /** 学科 */
   subject: Subject
-  /** 题目类型 */
-  questionType: QuestionType
   /** 创建时间（时间戳） */
   createdAt: number
   /** 更新时间（时间戳） */
@@ -74,8 +72,6 @@ export interface CreateWrongQuestionInput {
   content: string
   /** 学科 */
   subject: Subject
-  /** 题目类型 */
-  questionType: QuestionType
 }
 
 /** 创建错题的表单输入接口（允许空值，用于验证） */
@@ -84,13 +80,10 @@ export interface CreateWrongQuestionFormInput {
   content: string
   /** 学科（可能为空字符串） */
   subject: Subject | ''
-  /** 题目类型（可能为空字符串） */
-  questionType: QuestionType | ''
 }
 
 /** 错题表单验证错误 */
 export interface WrongQuestionValidationError {
   content?: string
   subject?: string
-  questionType?: string
 }

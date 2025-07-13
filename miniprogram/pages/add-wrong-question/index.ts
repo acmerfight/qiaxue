@@ -4,9 +4,7 @@
 
 import { 
   Subject, 
-  QuestionType, 
-  SUBJECT_NAMES, 
-  QUESTION_TYPE_NAMES
+  SUBJECT_NAMES
 } from '../../types/wrongQuestion'
 import {
   loadingState,
@@ -20,7 +18,6 @@ import { globalStore } from '../../store/index'
 interface FormData {
   content: string
   subject: Subject | ''
-  questionType: QuestionType | ''
 }
 
 interface SelectOption {
@@ -32,13 +29,10 @@ Page({
   data: {
     formData: {
       content: '',
-      subject: '',
-      questionType: ''
+      subject: ''
     } as FormData,
     selectedSubjectIndex: -1,
-    selectedQuestionTypeIndex: -1,
     subjectOptions: [] as SelectOption[],
-    questionTypeOptions: [] as SelectOption[],
     isLoading: false,
     validationErrors: {} as WrongQuestionValidationError
   },
@@ -63,15 +57,8 @@ Page({
       name: SUBJECT_NAMES[subject]
     }))
 
-    // 题目类型选项
-    const questionTypeOptions = Object.values(QuestionType).map(type => ({
-      value: type,
-      name: QUESTION_TYPE_NAMES[type]
-    }))
-
     this.setData({
-      subjectOptions,
-      questionTypeOptions
+      subjectOptions
     })
   },
 
@@ -128,25 +115,6 @@ Page({
     }
   },
 
-  /**
-   * 题目类型选择处理
-   */
-  onQuestionTypeChange(event: WechatMiniprogram.PickerChange) {
-    const index = parseInt(event.detail.value as string)
-    const questionType = this.data.questionTypeOptions[index]?.value as QuestionType
-
-    this.setData({
-      selectedQuestionTypeIndex: index,
-      'formData.questionType': questionType
-    })
-
-    // 清除题目类型验证错误
-    const errors = { ...this.data.validationErrors }
-    if (errors.questionType) {
-      delete errors.questionType
-      this.setData({ validationErrors: errors })
-    }
-  },
 
   /**
    * 表单提交处理

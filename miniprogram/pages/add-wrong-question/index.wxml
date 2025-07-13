@@ -47,31 +47,6 @@
       </view>
     </view>
 
-    <!-- 题目类型选择 -->
-    <view class="form-group">
-      <view class="label">
-        题目类型 <text class="required">*</text>
-      </view>
-      <view class="picker-container">
-        <picker 
-          mode="selector" 
-          range="{{questionTypeOptions}}" 
-          range-key="name"
-          value="{{selectedQuestionTypeIndex}}"
-          bindchange="onQuestionTypeChange"
-        >
-          <view class="picker {{validationErrors.questionType ? 'error' : ''}}">
-            <text class="{{selectedQuestionTypeIndex === -1 ? 'picker-placeholder' : ''}}">
-              {{selectedQuestionTypeIndex === -1 ? '请选择题目类型' : questionTypeOptions[selectedQuestionTypeIndex].name}}
-            </text>
-            <text class="picker-arrow">▼</text>
-          </view>
-        </picker>
-      </view>
-      <view class="error-message" wx:if="{{validationErrors.questionType}}">
-        {{validationErrors.questionType}}
-      </view>
-    </view>
 
     <!-- 提交按钮 -->
     <view class="button-group">

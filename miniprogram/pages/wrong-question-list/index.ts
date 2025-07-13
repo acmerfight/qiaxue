@@ -5,8 +5,7 @@
 import { formatTime } from '../../utils/util'
 import { 
   WrongQuestion,
-  SUBJECT_NAMES, 
-  QUESTION_TYPE_NAMES 
+  SUBJECT_NAMES
 } from '../../types/wrongQuestion'
 import {
   wrongQuestionsState,
@@ -17,7 +16,6 @@ import { globalStore } from '../../store/index'
 
 interface WrongQuestionDisplay extends WrongQuestion {
   subjectName: string
-  questionTypeName: string
   timeDisplay: string
 }
 
@@ -77,7 +75,6 @@ Page({
     const formattedQuestions: WrongQuestionDisplay[] = questions.map(question => ({
       ...question,
       subjectName: SUBJECT_NAMES[question.subject],
-      questionTypeName: QUESTION_TYPE_NAMES[question.questionType],
       timeDisplay: this.formatQuestionTime(question.createdAt)
     }))
 
