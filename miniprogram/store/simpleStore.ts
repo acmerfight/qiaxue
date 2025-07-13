@@ -26,13 +26,30 @@ export function createSimpleStore(): Store {
 
     get<T>(key: string): T {
       const state = states.get(key)
-      return state ? (state.value as T) : ([] as T)
+      if (!state) {
+        // 根据键值返回合理的默认值，避免使用 unknown
+        switch (key) {
+          case 'wrongQuestions':
+            return [] as unknown as T
+          case 'loading':
+          case 'hasUserInfo':
+          case 'userAuth':
+            return false as unknown as T
+          case 'validationErrors':
+            return {} as unknown as T
+          case 'userInfo':
+            return null as unknown as T
+          default:
+            return '' as unknown as T
+        }
+      }
+      return state.value as T
     },
 
     set<T>(key: string, value: T): void {
       let state = states.get(key) as State<T> | undefined
       if (!state) {
-        state = { value, listeners: [] } as State<T>
+        state = { value, listeners: [] }
         states.set(key, state as State<unknown>)
       } else {
         (state as State<T>).value = value
@@ -41,7 +58,7 @@ export function createSimpleStore(): Store {
       // 通知所有监听器
       ;(state as State<T>).listeners.forEach(listener => {
         try {
-          (listener as (value: T) => void)(value)
+          listener(value)
         } catch (error) {
           console.error('状态监听器执行错误:', error)
         }
@@ -51,7 +68,9 @@ export function createSimpleStore(): Store {
     watch<T>(key: string, listener: (value: T) => void): () => void {
       let state = states.get(key) as State<T> | undefined
       if (!state) {
-        state = { value: undefined as unknown as T, listeners: [] } as State<T>
+        // 创建新状态时使用合理的初始值
+        const initialValue = this.get<T>(key)
+        state = { value: initialValue, listeners: [] }
         states.set(key, state as State<unknown>)
       }
       

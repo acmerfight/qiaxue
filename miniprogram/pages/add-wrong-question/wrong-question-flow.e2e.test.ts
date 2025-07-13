@@ -3,7 +3,7 @@
  * 测试完整的用户流程：录入 → 列表 → 验证
  */
 
-import { Subject, QuestionType, WrongQuestion } from '../../types/wrongQuestion'
+import { Subject, QuestionType, WrongQuestion, CreateWrongQuestionFormInput } from '../../types/wrongQuestion'
 import {
   wrongQuestionsState,
   addWrongQuestion,
@@ -108,9 +108,9 @@ describe('错题录入完整用户流程', () => {
     test('用户未选择学科时看到错误提示', async () => {
       const noSubjectInput = {
         content: '这是一道没有选择学科的错题内容',
-        subject: '' as unknown as Subject,
+        subject: '' as const,
         questionType: QuestionType.CHOICE
-      }
+      } satisfies CreateWrongQuestionFormInput
 
       try {
         await addWrongQuestion(noSubjectInput)
@@ -126,8 +126,8 @@ describe('错题录入完整用户流程', () => {
       const noTypeInput = {
         content: '这是一道没有选择题目类型的错题内容',
         subject: Subject.MATH,
-        questionType: '' as unknown as QuestionType
-      }
+        questionType: '' as const
+      } satisfies CreateWrongQuestionFormInput
 
       try {
         await addWrongQuestion(noTypeInput)

@@ -6,7 +6,10 @@ import { globalStore, STATE_KEYS } from './index'
 import { 
   WrongQuestion, 
   CreateWrongQuestionInput, 
-  WrongQuestionValidationError 
+  CreateWrongQuestionFormInput,
+  WrongQuestionValidationError,
+  Subject,
+  QuestionType
 } from '../types/wrongQuestion'
 
 // 本地存储key
@@ -58,7 +61,7 @@ function saveWrongQuestionsToStorage(wrongQuestions: WrongQuestion[]): void {
 /**
  * 验证错题录入表单
  */
-export function validateWrongQuestionForm(input: CreateWrongQuestionInput): WrongQuestionValidationError {
+export function validateWrongQuestionForm(input: CreateWrongQuestionFormInput): WrongQuestionValidationError {
   const errors: WrongQuestionValidationError = {}
 
   // 验证内容
@@ -89,9 +92,9 @@ export function isFormValid(errors: WrongQuestionValidationError): boolean {
 }
 
 /**
- * 添加新错题
+ * 添加新错题（接受表单输入，内部进行类型转换）
  */
-export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<WrongQuestion> {
+export function addWrongQuestion(input: CreateWrongQuestionFormInput): Promise<WrongQuestion> {
   return new Promise((resolve, reject) => {
     // 验证输入
     const validationErrors = validateWrongQuestionForm(input)
@@ -99,6 +102,13 @@ export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<Wrong
       globalStore.set(VALIDATION_ERRORS_KEY, validationErrors)
       reject(new Error('表单验证失败'))
       return
+    }
+
+    // 类型转换：将表单输入转换为有效的错题数据
+    const validInput: CreateWrongQuestionInput = {
+      content: input.content,
+      subject: input.subject as Subject,
+      questionType: input.questionType as QuestionType
     }
 
     // 清除验证错误
@@ -112,9 +122,9 @@ export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<Wrong
       const now = Date.now()
       const newWrongQuestion: WrongQuestion = {
         id: generateId(),
-        content: input.content.trim(),
-        subject: input.subject,
-        questionType: input.questionType,
+        content: validInput.content.trim(),
+        subject: validInput.subject,
+        questionType: validInput.questionType,
         createdAt: now,
         updatedAt: now
       }

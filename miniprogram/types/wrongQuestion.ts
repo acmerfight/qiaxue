@@ -78,6 +78,16 @@ export interface CreateWrongQuestionInput {
   questionType: QuestionType
 }
 
+/** 创建错题的表单输入接口（允许空值，用于验证） */
+export interface CreateWrongQuestionFormInput {
+  /** 错题内容描述 */
+  content: string
+  /** 学科（可能为空字符串） */
+  subject: Subject | ''
+  /** 题目类型（可能为空字符串） */
+  questionType: QuestionType | ''
+}
+
 /** 错题表单验证错误 */
 export interface WrongQuestionValidationError {
   content?: string

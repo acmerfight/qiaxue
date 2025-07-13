@@ -6,8 +6,7 @@ import {
   Subject, 
   QuestionType, 
   SUBJECT_NAMES, 
-  QUESTION_TYPE_NAMES,
-  CreateWrongQuestionInput 
+  QUESTION_TYPE_NAMES
 } from '../../types/wrongQuestion'
 import {
   loadingState,
@@ -155,12 +154,8 @@ Page({
   async onSubmit() {
     const { formData } = this.data
 
-    // 构建提交数据
-    const submitData: CreateWrongQuestionInput = {
-      content: formData.content,
-      subject: formData.subject as Subject,
-      questionType: formData.questionType as QuestionType
-    }
+    // 直接提交表单数据，让状态管理层处理验证和转换
+    const submitData = formData
 
     try {
       // 添加错题

@@ -45,7 +45,7 @@ export function clearUserInfo(): void {
  * 更新用户头像
  */
 export function updateUserAvatar(avatarUrl: string): void {
-  const currentUserInfo = globalStore.get(USER_INFO_KEY)
+  const currentUserInfo = globalStore.get<UserInfo | null>(USER_INFO_KEY)
   if (currentUserInfo) {
     globalStore.set(USER_INFO_KEY, {
       ...currentUserInfo,
@@ -58,12 +58,12 @@ export function updateUserAvatar(avatarUrl: string): void {
  * 获取用户信息
  */
 export function getUserInfo(): UserInfo | null {
-  return globalStore.get(USER_INFO_KEY)
+  return globalStore.get<UserInfo | null>(USER_INFO_KEY)
 }
 
 /**
  * 检查是否有用户信息
  */
 export function checkHasUserInfo(): boolean {
-  return globalStore.get(HAS_USER_INFO_KEY)
+  return globalStore.get<boolean>(HAS_USER_INFO_KEY)
 }
