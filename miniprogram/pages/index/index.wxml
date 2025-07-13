@@ -5,34 +5,37 @@
     <view class="app-header">
       <text class="app-title">恰学</text>
       <text class="app-subtitle">智能错题管理助手</text>
+      
+      <!-- 用户信息区域移到标题下方 -->
+      <view class="userinfo">
+        <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
+          <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+            <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+          </button>
+          <view class="nickname-wrapper">
+            <text class="nickname-label">昵称</text>
+            <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
+          </view>
+        </block>
+        <block wx:elif="{{!hasUserInfo}}">
+          <button wx:if="{{canIUseGetUserProfile}}" class="login-button" bindtap="getUserProfile">登录</button>
+          <view wx:else class="version-tip">请使用2.10.4及以上版本基础库</view>
+        </block>
+        <block wx:else>
+          <view class="user-profile">
+            <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+            <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+          </view>
+        </block>
+      </view>
     </view>
     
     <!-- 功能入口 -->
     <view class="features">
       <button class="feature-button" bindtap="goToWrongQuestions">
-        📝 我的错题本
+        <view class="button-icon">📝</view>
+        <view class="button-text">我的错题本</view>
       </button>
-    </view>
-
-    <!-- 用户信息区域（可选） -->
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
     </view>
     
     <view class="usermotto">
