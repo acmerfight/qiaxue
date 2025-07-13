@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/wrong-question-list/index",
-    "pages/add-wrong-question/index"
+    "pages/add-wrong-question/index",
+    "pages/tdesign-demo/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",

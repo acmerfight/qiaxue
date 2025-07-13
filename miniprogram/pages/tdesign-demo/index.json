@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "TDesign 组件演示",
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button"
+  }
+}

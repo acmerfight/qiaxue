@@ -1,0 +1,68 @@
+.container {
+  padding: 32rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.section-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.section {
+  margin-bottom: 40rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.section-header {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  padding: 32rpx 32rpx 24rpx;
+  background-color: #fafafa;
+  border-bottom: 1rpx solid #eee;
+}
+
+/* 按钮演示样式 */
+.button-demo {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+/* 输入框演示样式 */
+.input-demo {
+  padding: 32rpx;
+}
+
+.input-value {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #666;
+  padding: 16rpx;
+  background-color: #f8f8f8;
+  border-radius: 8rpx;
+}
+
+/* 标签演示样式 */
+.tag-demo {
+  padding: 32rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+/* 交互演示样式 */
+.action-demo {
+  padding: 32rpx;
+  display: flex;
+  justify-content: center;
+}
+
+/* 单元格组件无需额外样式，使用默认样式 */

@@ -1,0 +1,31 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="section-title">TDesign 组件库演示</view>
+  
+  <!-- 按钮组件演示 -->
+  <view class="section">
+    <view class="section-header">按钮组件测试</view>
+    <view class="button-demo">
+      <t-button theme="primary" size="large" bind:tap="onButtonTap">
+        主要按钮
+      </t-button>
+      
+      <t-button theme="default" size="medium" bind:tap="onButtonTap">
+        次要按钮
+      </t-button>
+      
+      <t-button 
+        theme="primary" 
+        size="medium" 
+        loading="{{loading}}"
+        bind:tap="onPrimaryButtonTap">
+        {{loading ? '加载中...' : '带加载状态'}}
+      </t-button>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">说明</view>
+    <text>如果能看到上面的按钮样式，说明TDesign组件库已正常工作！</text>
+  </view>
+</view>
