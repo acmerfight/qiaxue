@@ -12,14 +12,11 @@
   },
   "keywords": [
     "微信小程序",
-    "typescript",
-    "ccstate"
+    "typescript"
   ],
   "author": "yaogangqiang",
   "license": "MIT",
-  "dependencies": {
-    "ccstate": "^5.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
