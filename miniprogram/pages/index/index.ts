@@ -1,4 +1,12 @@
 // index.ts
+import { 
+  setUserInfo, 
+  updateUserAvatar, 
+  getUserInfo, 
+  checkHasUserInfo,
+  type UserInfo 
+} from '../../store/userStore'
+
 // 获取应用实例
 const app = getApp<IAppOption>()
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
@@ -14,9 +22,26 @@ Page({
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
   },
+
+  // 同步状态到页面
+  syncStateToPage(): void {
+    const userInfo = getUserInfo()
+    const hasUserInfo = checkHasUserInfo()
+    
+    this.setData({
+      userInfo: userInfo || {
+        avatarUrl: defaultAvatarUrl,
+        nickName: '',
+      },
+      hasUserInfo
+    })
+  },
   
   onLoad() {
-    // 页面初始化时获取全局状态
+    // 页面初始化时同步状态
+    this.syncStateToPage()
+    
+    // 获取motto状态
     const globalData = app.globalData
     if (globalData.store && globalData.mottoState) {
       const motto = globalData.store.get(globalData.mottoState)
@@ -41,20 +66,45 @@ Page({
 
   onChooseAvatar(e: WechatMiniprogram.CustomEvent<{avatarUrl: string}>) {
     const { avatarUrl } = e.detail
-    const { nickName } = this.data.userInfo
-    this.setData({
-      "userInfo.avatarUrl": avatarUrl,
-      hasUserInfo: !!(nickName && avatarUrl && avatarUrl !== defaultAvatarUrl),
-    })
+    const currentUserInfo = getUserInfo()
+    
+    if (currentUserInfo) {
+      // 更新现有用户头像
+      updateUserAvatar(avatarUrl)
+    } else {
+      // 创建新用户信息
+      const { nickName } = this.data.userInfo
+      if (nickName && avatarUrl !== defaultAvatarUrl) {
+        setUserInfo({
+          nickName,
+          avatarUrl
+        })
+      }
+    }
+    
+    // 同步状态到页面
+    this.syncStateToPage()
   },
 
   onInputChange(e: WechatMiniprogram.Input) {
     const nickName = e.detail.value
-    const { avatarUrl } = this.data.userInfo
-    this.setData({
-      "userInfo.nickName": nickName,
-      hasUserInfo: !!(nickName && avatarUrl && avatarUrl !== defaultAvatarUrl),
-    })
+    const currentUserInfo = getUserInfo()
+    
+    if (currentUserInfo) {
+      // 更新现有用户昵称
+      setUserInfo({
+        ...currentUserInfo,
+        nickName
+      })
+    } else {
+      // 临时更新页面显示，等待头像选择完成后统一保存
+      this.setData({
+        "userInfo.nickName": nickName
+      })
+    }
+    
+    // 同步状态到页面
+    this.syncStateToPage()
   },
 
   getUserProfile() {
@@ -63,10 +113,22 @@ Page({
       desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
         console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
+        // 使用状态管理保存用户信息
+        const userInfo: UserInfo = {
+          nickName: res.userInfo.nickName,
+          avatarUrl: res.userInfo.avatarUrl,
+          gender: res.userInfo.gender,
+          city: res.userInfo.city,
+          province: res.userInfo.province,
+          country: res.userInfo.country
+        }
+        setUserInfo(userInfo)
+        
+        // 同步状态到页面
+        this.syncStateToPage()
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败:', err)
       }
     })
   },

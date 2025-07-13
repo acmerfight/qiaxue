@@ -4,7 +4,8 @@ module.exports = {
   roots: ['<rootDir>/miniprogram'],
   testMatch: [
     '**/__tests__/**/*.ts',
-    '**/?(*.)+(spec|test).ts'
+    '**/?(*.)+(spec|test).ts',
+    '**/tests/**/*.test.ts'
   ],
   transform: {
     '^.+\\.ts$': 'ts-jest'
