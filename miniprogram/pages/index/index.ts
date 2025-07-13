@@ -21,6 +21,7 @@ Page({
     hasUserInfo: false,
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
+    showUserInfo: false // 默认不显示用户信息区域，优先显示功能
   },
 
   // 同步状态到页面

@@ -61,10 +61,30 @@ page {
   flex: 1;
 }
 
+/* 应用标题样式 */
+.app-header {
+  text-align: center;
+  padding: 120rpx 60rpx 80rpx;
+}
+
+.app-title {
+  display: block;
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.app-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #8e8e93;
+}
+
 /* 功能入口样式 */
 .features {
-  margin-top: 60rpx;
   padding: 0 60rpx;
+  margin-bottom: 80rpx;
 }
 
 .feature-button {

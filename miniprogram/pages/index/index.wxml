@@ -1,7 +1,21 @@
 <!--index.wxml-->
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
-    <view class="userinfo">
+    <!-- 应用标题 -->
+    <view class="app-header">
+      <text class="app-title">恰学</text>
+      <text class="app-subtitle">智能错题管理助手</text>
+    </view>
+    
+    <!-- 功能入口 -->
+    <view class="features">
+      <button class="feature-button" bindtap="goToWrongQuestions">
+        📝 我的错题本
+      </button>
+    </view>
+
+    <!-- 用户信息区域（可选） -->
+    <view class="userinfo" wx:if="{{showUserInfo}}">
       <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
         <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
           <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
@@ -20,15 +34,9 @@
         <text class="userinfo-nickname">{{userInfo.nickName}}</text>
       </block>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
-    </view>
     
-    <!-- 功能入口 -->
-    <view class="features">
-      <button class="feature-button" bindtap="goToWrongQuestions">
-        📝 我的错题本
-      </button>
+    <view class="usermotto" wx:if="{{showUserInfo}}">
+      <text class="user-motto">{{motto}}</text>
     </view>
   </view>
 </scroll-view>
