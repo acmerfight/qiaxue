@@ -1,10 +1,10 @@
 // app.ts
-import { globalStore, mottoState } from './store/index'
+import { globalStore, MOTTO_STATE } from './store/index'
 
 App<IAppOption>({
   globalData: {
-    store: globalStore,
-    mottoState,
+    store: globalStore as any,
+    mottoState: MOTTO_STATE as any,
   },
   onLaunch() {
     // 展示本地存储能力

@@ -51,14 +51,12 @@ Page({
    */
   bindStateToData() {
     // 监听错题列表状态变化
-    globalStore.watch((get: any) => {
-      const questions = get(wrongQuestionsState)
+    globalStore.watch(wrongQuestionsState, (questions: any) => {
       this.formatAndSetQuestions(questions)
     })
 
     // 监听加载状态
-    globalStore.watch((get: any) => {
-      const loading = get(loadingState)
+    globalStore.watch(loadingState, (loading: boolean) => {
       this.setData({ isLoading: loading })
     })
   },
@@ -67,7 +65,7 @@ Page({
    * 加载错题数据
    */
   loadWrongQuestions() {
-    const questions = globalStore.get(wrongQuestionsState)
+    const questions = globalStore.get(wrongQuestionsState) as WrongQuestion[]
     this.formatAndSetQuestions(questions)
     this.setData({ isLoading: false })
   },

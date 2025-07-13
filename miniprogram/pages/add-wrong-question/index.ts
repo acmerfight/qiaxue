@@ -81,14 +81,12 @@ Page({
    */
   bindStateToData() {
     // 加载状态
-    globalStore.watch((get: any) => {
-      const loading = get(loadingState)
+    globalStore.watch(loadingState, (loading: boolean) => {
       this.setData({ isLoading: loading })
     })
 
     // 验证错误状态
-    globalStore.watch((get: any) => {
-      const errors = get(validationErrorState)
+    globalStore.watch(validationErrorState, (errors: any) => {
       this.setData({ validationErrors: errors })
     })
   },

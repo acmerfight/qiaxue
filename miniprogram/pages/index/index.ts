@@ -55,7 +55,7 @@ Component({
       // 使用全局状态管理
       const globalData = app.globalData
       if (globalData.store && globalData.mottoState) {
-        globalData.store.set(globalData.mottoState, 'CCState 引入成功！')
+        globalData.store.set(globalData.mottoState, '简单状态管理成功！')
         const newMotto = globalData.store.get(globalData.mottoState)
         this.setData({ motto: newMotto })
       }

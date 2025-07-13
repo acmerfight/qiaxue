@@ -2,7 +2,7 @@
  * 错题状态管理Store
  */
 
-import { globalStore, state } from './index'
+import { globalStore, STATE_KEYS } from './index'
 import { 
   WrongQuestion, 
   CreateWrongQuestionInput, 
@@ -12,14 +12,15 @@ import {
 // 本地存储key
 const STORAGE_KEY = 'wrongQuestions'
 
-/** 错题列表状态 */
-export const wrongQuestionsState = state<WrongQuestion[]>([])
+// 状态键
+const WRONG_QUESTIONS_KEY = STATE_KEYS.WRONG_QUESTIONS
+const LOADING_KEY = STATE_KEYS.LOADING
+const VALIDATION_ERRORS_KEY = STATE_KEYS.VALIDATION_ERRORS
 
-/** 正在加载状态 */
-export const loadingState = state<boolean>(false)
-
-/** 表单验证错误状态 */
-export const validationErrorState = state<WrongQuestionValidationError>({})
+// 导出状态键供页面使用
+export const wrongQuestionsState = WRONG_QUESTIONS_KEY
+export const loadingState = LOADING_KEY  
+export const validationErrorState = VALIDATION_ERRORS_KEY
 
 /**
  * 生成唯一ID
@@ -35,11 +36,11 @@ export function loadWrongQuestionsFromStorage(): void {
   try {
     const stored = wx.getStorageSync(STORAGE_KEY)
     if (stored && Array.isArray(stored)) {
-      globalStore.set(wrongQuestionsState, stored)
+      globalStore.set(WRONG_QUESTIONS_KEY, stored)
     }
   } catch (error) {
     console.error('加载错题数据失败:', error)
-    globalStore.set(wrongQuestionsState, [])
+    globalStore.set(WRONG_QUESTIONS_KEY, [])
   }
 }
 
@@ -95,16 +96,16 @@ export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<Wrong
     // 验证输入
     const validationErrors = validateWrongQuestionForm(input)
     if (!isFormValid(validationErrors)) {
-      globalStore.set(validationErrorState, validationErrors)
+      globalStore.set(VALIDATION_ERRORS_KEY, validationErrors)
       reject(new Error('表单验证失败'))
       return
     }
 
     // 清除验证错误
-    globalStore.set(validationErrorState, {})
+    globalStore.set(VALIDATION_ERRORS_KEY, {})
     
     // 设置加载状态
-    globalStore.set(loadingState, true)
+    globalStore.set(LOADING_KEY, true)
 
     try {
       // 创建新错题
@@ -119,17 +120,17 @@ export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<Wrong
       }
 
       // 更新状态（新错题添加到列表开头）
-      const currentList = globalStore.get(wrongQuestionsState)
+      const currentList = globalStore.get(WRONG_QUESTIONS_KEY) as WrongQuestion[]
       const updatedList = [newWrongQuestion, ...currentList]
-      globalStore.set(wrongQuestionsState, updatedList)
+      globalStore.set(WRONG_QUESTIONS_KEY, updatedList)
 
       // 保存到本地存储
       saveWrongQuestionsToStorage(updatedList)
 
-      globalStore.set(loadingState, false)
+      globalStore.set(LOADING_KEY, false)
       resolve(newWrongQuestion)
     } catch (error) {
-      globalStore.set(loadingState, false)
+      globalStore.set(LOADING_KEY, false)
       reject(error)
     }
   })
@@ -139,7 +140,7 @@ export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<Wrong
  * 根据ID获取错题
  */
 export function getWrongQuestionById(id: string): WrongQuestion | undefined {
-  const questions = globalStore.get(wrongQuestionsState)
+  const questions = globalStore.get(WRONG_QUESTIONS_KEY) as WrongQuestion[]
   return questions.find((q: WrongQuestion) => q.id === id)
 }
 
@@ -147,18 +148,19 @@ export function getWrongQuestionById(id: string): WrongQuestion | undefined {
  * 获取错题总数
  */
 export function getWrongQuestionCount(): number {
-  return globalStore.get(wrongQuestionsState).length
+  const questions = globalStore.get(WRONG_QUESTIONS_KEY) as WrongQuestion[]
+  return questions.length
 }
 
 /**
  * 清除验证错误
  */
 export function clearValidationErrors(): void {
-  globalStore.set(validationErrorState, {})
+  globalStore.set(VALIDATION_ERRORS_KEY, {})
 }
 
 /**
- * 初始化错题存储（应用启动时调用）
+ * 初始化错题存储
  */
 export function initWrongQuestionStore(): void {
   loadWrongQuestionsFromStorage()
