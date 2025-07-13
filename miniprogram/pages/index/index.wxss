@@ -85,10 +85,13 @@ page {
 .features {
   padding: 0 60rpx;
   margin-bottom: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .feature-button {
-  width: 100%;
+  width: 520rpx;
   background-color: #007aff;
   color: white;
   border-radius: 16rpx;
@@ -96,5 +99,5 @@ page {
   font-size: 32rpx;
   border: none;
   line-height: 88rpx;
-  margin-bottom: 24rpx;
+  margin: 0 auto;
 }
