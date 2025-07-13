@@ -23,7 +23,7 @@ interface State<T> {
 }
 
 export interface Store {
-  states: Map<string, State<any>>
+  states: Map<string, State<unknown>>
   get<K extends StateKey>(key: K): StateValue<K>
   set<K extends StateKey>(key: K, value: StateValue<K>): void
   watch<K extends StateKey>(key: K, listener: (value: StateValue<K>) => void): () => void
@@ -33,7 +33,7 @@ export interface Store {
  * 创建简单状态管理器
  */
 export function createSimpleStore(): Store {
-  const states = new Map<string, State<any>>()
+  const states = new Map<string, State<unknown>>()
 
   // 默认值配置
   const defaultValues: AppStates = {
@@ -84,13 +84,13 @@ export function createSimpleStore(): Store {
         states.set(key as string, state)
       }
       
-      state.listeners.push(listener as any)
+      state.listeners.push(listener as (value: unknown) => void)
       
       // 返回取消监听的函数
       return () => {
         const currentState = states.get(key as string)
         if (currentState) {
-          const index = currentState.listeners.indexOf(listener as any)
+          const index = currentState.listeners.indexOf(listener as (value: unknown) => void)
           if (index > -1) {
             currentState.listeners.splice(index, 1)
           }

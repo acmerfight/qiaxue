@@ -27,12 +27,12 @@ Page({
     isLoading: true
   },
 
-  onLoad() {
+  onLoad(): void {
     this.initializeData()
     this.bindStateToData()
   },
 
-  onShow() {
+  onShow(): void {
     // 页面显示时重新加载数据（从添加页面返回时）
     this.loadWrongQuestions()
   },
@@ -40,7 +40,7 @@ Page({
   /**
    * 初始化数据
    */
-  initializeData() {
+  initializeData(): void {
     // 初始化错题存储
     initWrongQuestionStore()
     this.loadWrongQuestions()
@@ -49,7 +49,7 @@ Page({
   /**
    * 绑定状态到页面数据
    */
-  bindStateToData() {
+  bindStateToData(): void {
     // 监听错题列表状态变化
     globalStore.watch(wrongQuestionsState, (questions: WrongQuestion[]) => {
       this.formatAndSetQuestions(questions)
@@ -64,7 +64,7 @@ Page({
   /**
    * 加载错题数据
    */
-  loadWrongQuestions() {
+  loadWrongQuestions(): void {
     const questions = globalStore.get(wrongQuestionsState) as WrongQuestion[]
     this.formatAndSetQuestions(questions)
     this.setData({ isLoading: false })
@@ -117,7 +117,7 @@ Page({
   /**
    * 点击添加错题按钮
    */
-  onAddQuestion() {
+  onAddQuestion(): void {
     wx.navigateTo({
       url: '/pages/add-wrong-question/index'
     })

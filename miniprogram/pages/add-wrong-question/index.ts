@@ -43,12 +43,12 @@ Page({
     validationErrors: {} as WrongQuestionValidationError
   },
 
-  onLoad() {
+  onLoad(): void {
     this.initializeOptions()
     this.bindStateToData()
   },
 
-  onUnload() {
+  onUnload(): void {
     // 清理状态
     clearValidationErrors()
   },
@@ -56,7 +56,7 @@ Page({
   /**
    * 初始化选择器选项
    */
-  initializeOptions() {
+  initializeOptions(): void {
     // 学科选项
     const subjectOptions = Object.values(Subject).map(subject => ({
       value: subject,
@@ -78,7 +78,7 @@ Page({
   /**
    * 绑定状态到页面数据
    */
-  bindStateToData() {
+  bindStateToData(): void {
     // 加载状态
     globalStore.watch(loadingState, (loading: boolean) => {
       this.setData({ isLoading: loading })

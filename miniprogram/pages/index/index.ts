@@ -37,7 +37,7 @@ Component({
       })
     },
     
-    onLoad() {
+    onLoad(): void {
       // 页面初始化时同步状态
       this.syncStateToPage()
       
@@ -50,7 +50,7 @@ Component({
     },
 
     // 事件处理函数
-    bindViewTap() {
+    bindViewTap(): void {
       // 使用全局状态管理
       const globalData = app.globalData
       if (globalData.store) {
@@ -112,7 +112,7 @@ Component({
       this.syncStateToPage()
     },
 
-    getUserProfile() {
+    getUserProfile(): void {
       // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
       wx.getUserProfile({
         desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
@@ -142,7 +142,7 @@ Component({
     /**
      * 跳转到错题本页面
      */
-    goToWrongQuestions() {
+    goToWrongQuestions(): void {
       wx.navigateTo({
         url: '/pages/wrong-question-list/index'
       })
