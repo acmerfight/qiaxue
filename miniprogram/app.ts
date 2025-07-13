@@ -1,13 +1,9 @@
 // app.ts
-import { createStore, state } from 'ccstate'
-
-// 全局状态管理
-const store = createStore()
-const mottoState = state('Hello CCState')
+import { globalStore, mottoState } from './store/index'
 
 App<IAppOption>({
   globalData: {
-    store,
+    store: globalStore,
     mottoState,
   },
   onLaunch() {

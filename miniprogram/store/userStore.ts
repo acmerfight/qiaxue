@@ -3,10 +3,7 @@
  * 管理用户相关的所有状态
  */
 
-import { state, createStore } from 'ccstate'
-
-// 创建全局 store 实例
-const globalStore = createStore()
+import { globalStore, state } from './index'
 
 export interface UserInfo {
   nickName: string
