@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{isLoading}}">
+    正在加载...
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:elif="{{wrongQuestions.length === 0}}">
+    <view class="empty-icon">📝</view>
+    <view class="empty-title">还没有错题记录</view>
+    <view class="empty-description">
+      开始记录你的错题，让学习更有针对性
+    </view>
+    <button class="add-first-button" bindtap="onAddQuestion">
+      添加第一道错题
+    </button>
+  </view>
+
+  <!-- 错题列表 -->
+  <view class="question-list" wx:else>
+    <view 
+      class="question-item" 
+      wx:for="{{wrongQuestions}}" 
+      wx:key="id"
+      bindtap="onQuestionTap"
+      data-id="{{item.id}}"
+    >
+      <view class="question-header">
+        <view class="question-tags">
+          <view class="tag subject">{{item.subjectName}}</view>
+          <view class="tag type">{{item.questionTypeName}}</view>
+        </view>
+        <view class="question-time">{{item.timeDisplay}}</view>
+      </view>
+      
+      <view class="question-content">
+        {{item.content}}
+      </view>
+      
+      <view class="question-footer">
+        <text class="view-detail">查看详情 →</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <button class="fab" bindtap="onAddQuestion" wx:if="{{wrongQuestions.length > 0}}">
+    <text class="fab-icon">+</text>
+  </button>
+</view>

@@ -60,3 +60,21 @@ page {
 .nickname-input {
   flex: 1;
 }
+
+/* 功能入口样式 */
+.features {
+  margin-top: 60rpx;
+  padding: 0 60rpx;
+}
+
+.feature-button {
+  width: 100%;
+  background-color: #007aff;
+  color: white;
+  border-radius: 16rpx;
+  height: 88rpx;
+  font-size: 32rpx;
+  border: none;
+  line-height: 88rpx;
+  margin-bottom: 24rpx;
+}

@@ -132,4 +132,13 @@ Page({
       }
     })
   },
+
+  /**
+   * 跳转到错题本页面
+   */
+  goToWrongQuestions() {
+    wx.navigateTo({
+      url: '/pages/wrong-question-list/index'
+    })
+  },
 })

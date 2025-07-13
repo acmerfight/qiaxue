@@ -1,0 +1,87 @@
+<view class="container">
+  <form class="form" bindsubmit="onSubmit">
+    <!-- 错题内容 -->
+    <view class="form-group">
+      <view class="label">
+        错题内容 <text class="required">*</text>
+      </view>
+      <textarea 
+        class="textarea {{validationErrors.content ? 'error' : ''}}"
+        placeholder="请详细描述错题内容，包括题目、你的答案、正确答案等..."
+        value="{{formData.content}}"
+        bindinput="onContentInput"
+        maxlength="500"
+        auto-height
+      />
+      <view class="char-count {{validationErrors.content ? 'error' : ''}}">
+        {{formData.content.length}}/500
+      </view>
+      <view class="error-message" wx:if="{{validationErrors.content}}">
+        {{validationErrors.content}}
+      </view>
+    </view>
+
+    <!-- 学科选择 -->
+    <view class="form-group">
+      <view class="label">
+        学科 <text class="required">*</text>
+      </view>
+      <view class="picker-container">
+        <picker 
+          mode="selector" 
+          range="{{subjectOptions}}" 
+          range-key="name"
+          value="{{selectedSubjectIndex}}"
+          bindchange="onSubjectChange"
+        >
+          <view class="picker {{validationErrors.subject ? 'error' : ''}}">
+            <text class="{{selectedSubjectIndex === -1 ? 'picker-placeholder' : ''}}">
+              {{selectedSubjectIndex === -1 ? '请选择学科' : subjectOptions[selectedSubjectIndex].name}}
+            </text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      <view class="error-message" wx:if="{{validationErrors.subject}}">
+        {{validationErrors.subject}}
+      </view>
+    </view>
+
+    <!-- 题目类型选择 -->
+    <view class="form-group">
+      <view class="label">
+        题目类型 <text class="required">*</text>
+      </view>
+      <view class="picker-container">
+        <picker 
+          mode="selector" 
+          range="{{questionTypeOptions}}" 
+          range-key="name"
+          value="{{selectedQuestionTypeIndex}}"
+          bindchange="onQuestionTypeChange"
+        >
+          <view class="picker {{validationErrors.questionType ? 'error' : ''}}">
+            <text class="{{selectedQuestionTypeIndex === -1 ? 'picker-placeholder' : ''}}">
+              {{selectedQuestionTypeIndex === -1 ? '请选择题目类型' : questionTypeOptions[selectedQuestionTypeIndex].name}}
+            </text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      <view class="error-message" wx:if="{{validationErrors.questionType}}">
+        {{validationErrors.questionType}}
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="button-group">
+      <button 
+        class="submit-button {{isLoading ? 'loading' : ''}}"
+        formType="submit"
+        disabled="{{isLoading}}"
+      >
+        {{isLoading ? '保存中...' : '保存错题'}}
+      </button>
+    </view>
+  </form>
+</view>

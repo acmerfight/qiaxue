@@ -1,0 +1,146 @@
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 空状态样式 */
+.empty-state {
+  padding: 120rpx 60rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  color: #c7c7cc;
+  margin-bottom: 32rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.empty-description {
+  font-size: 26rpx;
+  color: #8e8e93;
+  line-height: 1.6;
+  margin-bottom: 64rpx;
+}
+
+.add-first-button {
+  background-color: #007aff;
+  color: white;
+  border-radius: 50rpx;
+  padding: 0 48rpx;
+  height: 80rpx;
+  font-size: 28rpx;
+  border: none;
+  line-height: 80rpx;
+}
+
+/* 列表样式 */
+.question-list {
+  padding: 32rpx;
+}
+
+.question-item {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  position: relative;
+}
+
+.question-item:last-child {
+  margin-bottom: 32rpx;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.question-tags {
+  display: flex;
+  gap: 16rpx;
+}
+
+.tag {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  color: white;
+}
+
+.tag.subject {
+  background-color: #007aff;
+}
+
+.tag.type {
+  background-color: #34c759;
+}
+
+.question-time {
+  font-size: 22rpx;
+  color: #8e8e93;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.question-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.question-footer {
+  margin-top: 16rpx;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.view-detail {
+  font-size: 24rpx;
+  color: #007aff;
+}
+
+/* 悬浮添加按钮 */
+.fab {
+  position: fixed;
+  right: 32rpx;
+  bottom: 32rpx;
+  width: 112rpx;
+  height: 112rpx;
+  background-color: #007aff;
+  border-radius: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 122, 255, 0.3);
+  z-index: 1000;
+  border: none;
+  padding: 0;
+}
+
+.fab-icon {
+  font-size: 48rpx;
+  color: white;
+  font-weight: 300;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 64rpx;
+  color: #8e8e93;
+  font-size: 26rpx;
+}

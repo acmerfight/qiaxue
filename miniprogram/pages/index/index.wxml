@@ -23,5 +23,12 @@
     <view class="usermotto">
       <text class="user-motto">{{motto}}</text>
     </view>
+    
+    <!-- 功能入口 -->
+    <view class="features">
+      <button class="feature-button" bindtap="goToWrongQuestions">
+        📝 我的错题本
+      </button>
+    </view>
   </view>
 </scroll-view>

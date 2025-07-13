@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/wrong-question-list/index",
+    "pages/add-wrong-question/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
