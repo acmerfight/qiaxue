@@ -3,60 +3,71 @@
  * 专为微信小程序环境优化
  */
 
+// 定义应用所有状态的具体类型
+interface AppStates {
+  motto: string
+  userInfo: WechatMiniprogram.UserInfo | null
+  wrongQuestions: import('../types/wrongQuestion').WrongQuestion[]
+  loading: boolean
+  hasUserInfo: boolean
+  userAuth: boolean
+  validationErrors: import('../types/wrongQuestion').WrongQuestionValidationError
+}
+
+type StateKey = keyof AppStates
+type StateValue<K extends StateKey> = AppStates[K]
+
 interface State<T> {
   value: T
   listeners: Array<(value: T) => void>
 }
 
-interface Store {
-  states: Map<string, State<unknown>>
-  get<T>(key: string): T
-  set<T>(key: string, value: T): void
-  watch<T>(key: string, listener: (value: T) => void): () => void
+export interface Store {
+  states: Map<string, State<any>>
+  get<K extends StateKey>(key: K): StateValue<K>
+  set<K extends StateKey>(key: K, value: StateValue<K>): void
+  watch<K extends StateKey>(key: K, listener: (value: StateValue<K>) => void): () => void
 }
 
 /**
  * 创建简单状态管理器
  */
 export function createSimpleStore(): Store {
-  const states = new Map<string, State<unknown>>()
+  const states = new Map<string, State<any>>()
+
+  // 默认值配置
+  const defaultValues: AppStates = {
+    motto: 'Hello World',
+    userInfo: null,
+    wrongQuestions: [],
+    loading: false,
+    hasUserInfo: false,
+    userAuth: false,
+    validationErrors: {}
+  }
 
   return {
     states,
 
-    get<T>(key: string): T {
-      const state = states.get(key)
+    get<K extends StateKey>(key: K): StateValue<K> {
+      const state = states.get(key as string)
       if (!state) {
-        // 根据键值返回合理的默认值，避免使用 unknown
-        switch (key) {
-          case 'wrongQuestions':
-            return [] as unknown as T
-          case 'loading':
-          case 'hasUserInfo':
-          case 'userAuth':
-            return false as unknown as T
-          case 'validationErrors':
-            return {} as unknown as T
-          case 'userInfo':
-            return null as unknown as T
-          default:
-            return '' as unknown as T
-        }
+        return defaultValues[key]
       }
-      return state.value as T
+      return state.value as StateValue<K>
     },
 
-    set<T>(key: string, value: T): void {
-      let state = states.get(key) as State<T> | undefined
+    set<K extends StateKey>(key: K, value: StateValue<K>): void {
+      let state = states.get(key as string)
       if (!state) {
         state = { value, listeners: [] }
-        states.set(key, state as State<unknown>)
+        states.set(key as string, state)
       } else {
-        (state as State<T>).value = value
+        state.value = value
       }
       
       // 通知所有监听器
-      ;(state as State<T>).listeners.forEach(listener => {
+      state.listeners.forEach(listener => {
         try {
           listener(value)
         } catch (error) {
@@ -65,24 +76,23 @@ export function createSimpleStore(): Store {
       })
     },
 
-    watch<T>(key: string, listener: (value: T) => void): () => void {
-      let state = states.get(key) as State<T> | undefined
+    watch<K extends StateKey>(key: K, listener: (value: StateValue<K>) => void): () => void {
+      let state = states.get(key as string)
       if (!state) {
-        // 创建新状态时使用合理的初始值
-        const initialValue = this.get<T>(key)
+        const initialValue = this.get(key)
         state = { value: initialValue, listeners: [] }
-        states.set(key, state as State<unknown>)
+        states.set(key as string, state)
       }
       
-      ;(state as State<T>).listeners.push(listener)
+      state.listeners.push(listener as any)
       
       // 返回取消监听的函数
       return () => {
-        const currentState = states.get(key) as State<T> | undefined
+        const currentState = states.get(key as string)
         if (currentState) {
-          const index = (currentState as State<T>).listeners.indexOf(listener)
+          const index = currentState.listeners.indexOf(listener as any)
           if (index > -1) {
-            ;(currentState as State<T>).listeners.splice(index, 1)
+            currentState.listeners.splice(index, 1)
           }
         }
       }
@@ -92,11 +102,13 @@ export function createSimpleStore(): Store {
 
 // 全局状态键
 export const STATE_KEYS = {
-  MOTTO: 'motto',
-  USER_INFO: 'userInfo',
-  WRONG_QUESTIONS: 'wrongQuestions',
-  LOADING: 'loading',
-  VALIDATION_ERRORS: 'validationErrors'
+  MOTTO: 'motto' as const,
+  USER_INFO: 'userInfo' as const,
+  WRONG_QUESTIONS: 'wrongQuestions' as const,
+  LOADING: 'loading' as const,
+  HAS_USER_INFO: 'hasUserInfo' as const,
+  USER_AUTH: 'userAuth' as const,
+  VALIDATION_ERRORS: 'validationErrors' as const
 } as const
 
 // 全局唯一store实例
@@ -107,4 +119,6 @@ globalStore.set(STATE_KEYS.MOTTO, 'Hello World')
 globalStore.set(STATE_KEYS.USER_INFO, null)
 globalStore.set(STATE_KEYS.WRONG_QUESTIONS, [])
 globalStore.set(STATE_KEYS.LOADING, false)
+globalStore.set(STATE_KEYS.HAS_USER_INFO, false)
+globalStore.set(STATE_KEYS.USER_AUTH, false)
 globalStore.set(STATE_KEYS.VALIDATION_ERRORS, {})

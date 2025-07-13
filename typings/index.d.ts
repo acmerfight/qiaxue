@@ -4,12 +4,7 @@ declare global {
   interface IAppOption {
     globalData: {
       userInfo?: WechatMiniprogram.UserInfo,
-      store?: {
-        states: Map<string, unknown>
-        get<T>(key: string): T
-        set<T>(key: string, value: T): void
-        watch<T>(key: string, listener: (value: T) => void): () => void
-      },
+      store?: import('../miniprogram/store/simpleStore').Store,
       mottoState?: string,
     }
     userInfoReadyCallback?: WechatMiniprogram.GetUserInfoSuccessCallback,
