@@ -51,13 +51,13 @@ Page({
    */
   bindStateToData() {
     // 监听错题列表状态变化
-    globalStore.watch((get) => {
+    globalStore.watch((get: any) => {
       const questions = get(wrongQuestionsState)
       this.formatAndSetQuestions(questions)
     })
 
     // 监听加载状态
-    globalStore.watch((get) => {
+    globalStore.watch((get: any) => {
       const loading = get(loadingState)
       this.setData({ isLoading: loading })
     })

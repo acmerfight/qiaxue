@@ -140,7 +140,7 @@ export function addWrongQuestion(input: CreateWrongQuestionInput): Promise<Wrong
  */
 export function getWrongQuestionById(id: string): WrongQuestion | undefined {
   const questions = globalStore.get(wrongQuestionsState)
-  return questions.find(q => q.id === id)
+  return questions.find((q: WrongQuestion) => q.id === id)
 }
 
 /**
