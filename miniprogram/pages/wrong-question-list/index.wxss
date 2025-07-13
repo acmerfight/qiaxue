@@ -5,7 +5,7 @@
 
 /* 空状态样式 */
 .empty-state {
-  padding: 180rpx 60rpx;
+  padding: 180rpx 40rpx;
   text-align: center;
 }
 
@@ -49,7 +49,7 @@
 
 /* 列表样式 */
 .question-list {
-  padding: 32rpx 24rpx;
+  padding: 32rpx 16rpx;
 }
 
 .question-item {

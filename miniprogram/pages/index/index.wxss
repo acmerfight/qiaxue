@@ -112,7 +112,7 @@ page {
 /* 应用标题样式 */
 .app-header {
   text-align: center;
-  padding: 100rpx 60rpx 80rpx;
+  padding: 100rpx 40rpx 80rpx;
 }
 
 .app-title {
@@ -135,7 +135,7 @@ page {
 
 /* 功能入口样式 */
 .features {
-  padding: 0 60rpx;
+  padding: 0 40rpx;
   margin-bottom: 80rpx;
   display: flex;
   justify-content: center;
