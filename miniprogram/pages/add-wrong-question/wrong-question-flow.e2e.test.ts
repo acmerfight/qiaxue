@@ -122,28 +122,28 @@ describe('错题录入完整用户流程', () => {
     test('老用户添加新错题到已有列表', async () => {
       // Given: 用户已有2道错题
       await addWrongQuestion({
-        content: '第一道历史错题，关于中国古代历史',
-        subject: Subject.HISTORY
+        content: '第一道数学错题，关于代数计算',
+        subject: Subject.MATH
       })
       
       await addWrongQuestion({
-        content: '第二道物理错题，关于力学计算',
-        subject: Subject.PHYSICS
+        content: '第二道数学错题，关于几何计算',
+        subject: Subject.MATH
       })
 
       expect(getWrongQuestionCount()).toBe(2)
 
       // When: 用户添加第三道错题
       const newQuestion = await addWrongQuestion({
-        content: '第三道英语错题，关于语法选择',
-        subject: Subject.ENGLISH
+        content: '第三道数学错题，关于函数计算',
+        subject: Subject.MATH
       })
 
       // Then: 新错题添加到列表开头
       expect(getWrongQuestionCount()).toBe(3)
       const questions = globalStore.get(wrongQuestionsState) as WrongQuestion[]
       expect(questions[0]).toEqual(newQuestion)
-      expect(questions[0].subject).toBe(Subject.ENGLISH)
+      expect(questions[0].subject).toBe(Subject.MATH)
     })
 
     test('用户能看到错题按时间倒序排列', async () => {
@@ -162,12 +162,12 @@ describe('错题录入完整用户流程', () => {
 
       const question2 = await addWrongQuestion({
         content: '中间的错题内容足够长',
-        subject: Subject.PHYSICS
+        subject: Subject.MATH
       })
 
       const question3 = await addWrongQuestion({
         content: '最新的错题内容足够长',
-        subject: Subject.ENGLISH
+        subject: Subject.MATH
       })
 
       // Then: 错题按时间倒序排列（最新的在前）
@@ -185,7 +185,7 @@ describe('错题录入完整用户流程', () => {
       // Given: 用户添加了错题
       const originalQuestion = await addWrongQuestion({
         content: '测试持久化的错题内容',
-        subject: Subject.CHINESE
+        subject: Subject.MATH
       })
 
       // When: 模拟应用重启，从存储中恢复数据

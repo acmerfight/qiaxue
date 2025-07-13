@@ -4,15 +4,7 @@
 
 /** 学科枚举 */
 export enum Subject {
-  MATH = 'math',
-  CHINESE = 'chinese', 
-  ENGLISH = 'english',
-  PHYSICS = 'physics',
-  CHEMISTRY = 'chemistry',
-  BIOLOGY = 'biology',
-  HISTORY = 'history',
-  GEOGRAPHY = 'geography',
-  POLITICS = 'politics'
+  MATH = 'math'
 }
 
 /** 题目类型枚举 */
@@ -29,15 +21,7 @@ export enum QuestionType {
 
 /** 学科中文名称映射 */
 export const SUBJECT_NAMES: Record<Subject, string> = {
-  [Subject.MATH]: '数学',
-  [Subject.CHINESE]: '语文',
-  [Subject.ENGLISH]: '英语', 
-  [Subject.PHYSICS]: '物理',
-  [Subject.CHEMISTRY]: '化学',
-  [Subject.BIOLOGY]: '生物',
-  [Subject.HISTORY]: '历史',
-  [Subject.GEOGRAPHY]: '地理',
-  [Subject.POLITICS]: '政治'
+  [Subject.MATH]: '数学'
 }
 
 /** 题目类型中文名称映射 */
