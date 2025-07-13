@@ -7,9 +7,22 @@ import {
   setUserInfo,
   clearUserInfo,
   getUserInfo,
-  checkHasUserInfo,
-  UserInfo
+  checkHasUserInfo
 } from '../../store/userStore'
+
+// 创建测试用用户信息的辅助函数
+function createTestUserInfo(overrides: Partial<WechatMiniprogram.UserInfo> = {}): WechatMiniprogram.UserInfo {
+  return {
+    nickName: '测试用户',
+    avatarUrl: 'https://test.com/avatar.jpg',
+    city: '',
+    country: '',
+    gender: 0,
+    language: 'zh_CN',
+    province: '',
+    ...overrides
+  }
+}
 
 // 模拟小程序环境和用户操作
 function createMiniProgramEnvironment() {
@@ -35,13 +48,13 @@ function createMiniProgramEnvironment() {
     },
 
     // 模拟用户执行登录流程
-    performUserLogin(userInfo: UserInfo) {
+    performUserLogin(userInfo: WechatMiniprogram.UserInfo) {
       setUserInfo(userInfo)
       return this.getUserDisplayState()
     },
 
     // 模拟用户更新个人信息
-    updateUserProfile(updates: Partial<UserInfo>) {
+    updateUserProfile(updates: Partial<WechatMiniprogram.UserInfo>) {
       const current = getUserInfo()
       if (current) {
         setUserInfo({ ...current, ...updates })
@@ -86,10 +99,10 @@ describe('用户完整使用场景', () => {
     })
 
     test('新用户完成微信授权登录成功进入应用', () => {
-      const newUser: UserInfo = {
+      const newUser = createTestUserInfo({
         nickName: '新用户小明',
         avatarUrl: 'https://wx.qlogo.cn/mmopen/abc123.jpg'
-      }
+      })
 
       const displayState = miniProgram.performUserLogin(newUser)
 
@@ -100,10 +113,10 @@ describe('用户完整使用场景', () => {
     })
 
     test('新用户登录后关闭小程序再次打开仍保持登录状态', () => {
-      const user: UserInfo = {
+      const user = createTestUserInfo({
         nickName: '持久用户',
         avatarUrl: 'https://example.com/avatar.jpg'
-      }
+      })
       
       miniProgram.performUserLogin(user)
       
@@ -122,12 +135,12 @@ describe('用户完整使用场景', () => {
   describe('老用户日常使用场景', () => {
     beforeEach(() => {
       // 模拟已有用户登录状态
-      const existingUser: UserInfo = {
+      const existingUser = createTestUserInfo({
         nickName: '老用户张三',
         avatarUrl: 'https://example.com/zhang-avatar.jpg',
         city: '深圳',
         province: '广东'
-      }
+      })
       setUserInfo(existingUser)
     })
 
@@ -171,10 +184,10 @@ describe('用户完整使用场景', () => {
 
   describe('异常情况用户体验', () => {
     test('网络异常后恢复，用户登录状态保持完整', () => {
-      const user: UserInfo = {
+      const user = createTestUserInfo({
         nickName: '网络测试用户',
         avatarUrl: 'https://example.com/network-test.jpg'
-      }
+      })
       
       miniProgram.performUserLogin(user)
       
@@ -190,10 +203,10 @@ describe('用户完整使用场景', () => {
 
     test('数据异常清空后用户看到正确的重新登录提示', () => {
       // 先设置用户登录
-      miniProgram.performUserLogin({
+      miniProgram.performUserLogin(createTestUserInfo({
         nickName: '异常测试',
         avatarUrl: 'https://example.com/test.jpg'
-      })
+      }))
 
       // 模拟数据异常清空
       clearUserInfo()
@@ -213,10 +226,10 @@ describe('用户完整使用场景', () => {
       expect(launchState.isFirstTime).toBe(true)
 
       // 2. 完成登录开始使用
-      const user: UserInfo = {
+      const user = createTestUserInfo({
         nickName: '生命周期用户',
         avatarUrl: 'https://example.com/lifecycle.jpg'
-      }
+      })
       miniProgram.performUserLogin(user)
       
       // 3. 模拟卸载重装（清空本地数据）
@@ -236,10 +249,10 @@ describe('用户完整使用场景', () => {
 
     test('多次个人信息修改的用户体验连续性', () => {
       // 初始登录
-      miniProgram.performUserLogin({
+      miniProgram.performUserLogin(createTestUserInfo({
         nickName: '多变用户',
         avatarUrl: 'https://example.com/original.jpg'
-      })
+      }))
 
       // 连续修改头像
       let state = miniProgram.updateUserProfile({ avatarUrl: 'https://example.com/change1.jpg' })
@@ -253,7 +266,7 @@ describe('用户完整使用场景', () => {
       expect(state.displayName).toBe('超级多变用户')
       expect(state.displayAvatar).toBe('https://example.com/change2.jpg') // 头像保持
 
-      // 同时修改头像和昵称
+      // 同时修改头像和昵称  
       state = miniProgram.updateUserProfile({
         nickName: '最终用户',
         avatarUrl: 'https://example.com/final.jpg'

@@ -8,9 +8,22 @@ import {
   clearUserInfo,
   updateUserAvatar,
   getUserInfo,
-  checkHasUserInfo,
-  UserInfo
+  checkHasUserInfo
 } from './userStore'
+
+// 创建测试用用户信息的辅助函数
+function createTestUserInfo(overrides: Partial<WechatMiniprogram.UserInfo> = {}): WechatMiniprogram.UserInfo {
+  return {
+    nickName: '测试用户',
+    avatarUrl: 'https://test.com/avatar.jpg',
+    city: '',
+    country: '',
+    gender: 0,
+    language: 'zh_CN',
+    province: '',
+    ...overrides
+  }
+}
 
 describe('用户状态对体验的影响', () => {
   beforeEach(() => {
@@ -18,10 +31,10 @@ describe('用户状态对体验的影响', () => {
   })
 
   test('用户登录成功后能看到个人信息', () => {
-    const userInfo: UserInfo = {
+    const userInfo = createTestUserInfo({
       nickName: '张三',
       avatarUrl: 'https://example.com/avatar.jpg'
-    }
+    })
 
     setUserInfo(userInfo)
 
@@ -30,10 +43,10 @@ describe('用户状态对体验的影响', () => {
   })
 
   test('用户换头像后立即在界面生效', () => {
-    setUserInfo({
+    setUserInfo(createTestUserInfo({
       nickName: '李四',
       avatarUrl: 'https://example.com/old.jpg'
-    })
+    }))
 
     updateUserAvatar('https://example.com/new.jpg')
 
@@ -42,10 +55,10 @@ describe('用户状态对体验的影响', () => {
   })
 
   test('用户退出登录后回到游客状态', () => {
-    setUserInfo({
+    setUserInfo(createTestUserInfo({
       nickName: '王五',
       avatarUrl: 'https://example.com/avatar.jpg'
-    })
+    }))
     
     clearUserInfo()
 
