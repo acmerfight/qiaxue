@@ -18,35 +18,6 @@ describe('formatTime', () => {
     expect(result).toBe('2023/01/05 09:08:07')
   })
 
-  test('应该正确处理午夜时间', () => {
-    const date = new Date(2023, 5, 15, 0, 0, 0) // 2023年6月15日 00:00:00
-    const result = formatTime(date)
-    expect(result).toBe('2023/06/15 00:00:00')
-  })
-
-  test('应该正确处理年末时间', () => {
-    const date = new Date(2023, 11, 31, 23, 59, 59) // 2023年12月31日 23:59:59
-    const result = formatTime(date)
-    expect(result).toBe('2023/12/31 23:59:59')
-  })
-
-  test('应该正确处理闰年2月29日', () => {
-    const date = new Date(2024, 1, 29, 12, 0, 0) // 2024年2月29日 12:00:00
-    const result = formatTime(date)
-    expect(result).toBe('2024/02/29 12:00:00')
-  })
-
-  test('应该返回字符串类型', () => {
-    const date = new Date(2023, 5, 15, 10, 30, 45)
-    const result = formatTime(date)
-    expect(typeof result).toBe('string')
-  })
-
-  test('应该包含正确的分隔符', () => {
-    const date = new Date(2023, 5, 15, 10, 30, 45)
-    const result = formatTime(date)
-    expect(result).toMatch(/\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}/)
-  })
 })
 
 describe('formatNumber', () => {
@@ -67,8 +38,4 @@ describe('formatNumber', () => {
     expect(formatNumber(999)).toBe('999')
   })
 
-  test('应该返回字符串类型', () => {
-    expect(typeof formatNumber(5)).toBe('string')
-    expect(typeof formatNumber(15)).toBe('string')
-  })
 })

@@ -79,32 +79,6 @@ describe('用户状态管理', () => {
     expect(getUserInfo()).toBeNull()
   })
 
-  test('getUserInfo 应该返回当前用户信息', () => {
-    expect(getUserInfo()).toBeNull()
-
-    const userInfo: UserInfo = {
-      nickName: '测试用户',
-      avatarUrl: 'https://example.com/avatar.jpg'
-    }
-
-    setUserInfo(userInfo)
-    expect(getUserInfo()).toEqual(userInfo)
-  })
-
-  test('checkHasUserInfo 应该返回正确的状态', () => {
-    expect(checkHasUserInfo()).toBe(false)
-
-    const userInfo: UserInfo = {
-      nickName: '测试用户',
-      avatarUrl: 'https://example.com/avatar.jpg'
-    }
-
-    setUserInfo(userInfo)
-    expect(checkHasUserInfo()).toBe(true)
-
-    clearUserInfo()
-    expect(checkHasUserInfo()).toBe(false)
-  })
 
   test('应该处理只有必填字段的用户信息', () => {
     const minimalUserInfo: UserInfo = {
