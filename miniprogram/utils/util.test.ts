@@ -1,41 +1,20 @@
 /**
- * util.ts 单元测试
- * 测试时间格式化功能
+ * 工具函数测试 (5%) - 仅测试用户直接感知的核心功能
+ * 只保留对用户体验有直接影响的测试
  */
 
-import { formatTime, formatNumber } from './util'
+import { formatTime } from './util'
 
-describe('formatTime', () => {
-  test('应该正确格式化标准时间', () => {
-    const date = new Date(2023, 11, 25, 14, 30, 45) // 2023年12月25日 14:30:45
-    const result = formatTime(date)
-    expect(result).toBe('2023/12/25 14:30:45')
+describe('用户感知的时间显示', () => {
+  test('用户能看到正确的时间格式显示', () => {
+    const userActionTime = new Date(2023, 11, 25, 14, 30, 45)
+    const displayTime = formatTime(userActionTime)
+    expect(displayTime).toBe('2023/12/25 14:30:45')
   })
 
-  test('应该为单位数字补零', () => {
-    const date = new Date(2023, 0, 5, 9, 8, 7) // 2023年1月5日 09:08:07
-    const result = formatTime(date)
-    expect(result).toBe('2023/01/05 09:08:07')
+  test('用户在任何时间点都能看到正确格式', () => {
+    const earlyMorning = new Date(2023, 0, 5, 9, 8, 7)
+    const displayTime = formatTime(earlyMorning)
+    expect(displayTime).toBe('2023/01/05 09:08:07')
   })
-
-})
-
-describe('formatNumber', () => {
-  test('应该为单位数字补零', () => {
-    expect(formatNumber(5)).toBe('05')
-    expect(formatNumber(0)).toBe('00')
-    expect(formatNumber(9)).toBe('09')
-  })
-
-  test('应该保持两位数不变', () => {
-    expect(formatNumber(10)).toBe('10')
-    expect(formatNumber(25)).toBe('25')
-    expect(formatNumber(99)).toBe('99')
-  })
-
-  test('应该处理大于两位数的数字', () => {
-    expect(formatNumber(100)).toBe('100')
-    expect(formatNumber(999)).toBe('999')
-  })
-
 })

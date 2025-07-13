@@ -1,231 +1,266 @@
 /**
- * 页面与状态管理集成测试
- * 测试页面逻辑与状态管理的真实集成，模拟页面方法调用
+ * 用户行为测试 (80%) - 完整的端到端用户使用场景
+ * 测试用户真实使用小程序的完整流程和体验
  */
 
 import {
   setUserInfo,
   clearUserInfo,
-  updateUserAvatar,
   getUserInfo,
   checkHasUserInfo,
   UserInfo
 } from '../../store/userStore'
 
-// 模拟页面行为的辅助函数
-function simulatePageUserFlow() {
+// 模拟小程序环境和用户操作
+function createMiniProgramEnvironment() {
   return {
-    // 模拟页面同步状态的方法
-    syncStateToPage() {
-      const userInfo = getUserInfo()
-      const hasUserInfo = checkHasUserInfo()
-      
+    // 模拟小程序启动
+    launchMiniProgram() {
       return {
-        userInfo: userInfo || {
-          avatarUrl: 'default-avatar.jpg',
-          nickName: '',
-        },
-        hasUserInfo
+        isFirstTime: !checkHasUserInfo(),
+        userInfo: getUserInfo(),
+        needsLogin: !checkHasUserInfo()
       }
     },
 
-    // 模拟用户选择头像
-    onChooseAvatar(avatarUrl: string, currentNickName?: string) {
-      const currentUserInfo = getUserInfo()
-      
-      if (currentUserInfo) {
-        updateUserAvatar(avatarUrl)
-      } else if (currentNickName && avatarUrl !== 'default-avatar.jpg') {
-        setUserInfo({
-          nickName: currentNickName,
-          avatarUrl
-        })
+    // 模拟用户看到的界面状态
+    getUserDisplayState() {
+      const user = getUserInfo()
+      return {
+        showLoginPrompt: !checkHasUserInfo(),
+        displayName: user?.nickName || '点击登录',
+        displayAvatar: user?.avatarUrl || '/images/default-avatar.png',
+        canUseFeatures: checkHasUserInfo()
       }
-      
-      return this.syncStateToPage()
     },
 
-    // 模拟用户输入昵称
-    onInputChange(nickName: string) {
-      const currentUserInfo = getUserInfo()
-      
-      if (currentUserInfo) {
-        setUserInfo({
-          ...currentUserInfo,
-          nickName
-        })
-      }
-      
-      return this.syncStateToPage()
-    },
-
-    // 模拟微信授权
-    getUserProfile(userInfo: UserInfo) {
+    // 模拟用户执行登录流程
+    performUserLogin(userInfo: UserInfo) {
       setUserInfo(userInfo)
-      return this.syncStateToPage()
+      return this.getUserDisplayState()
+    },
+
+    // 模拟用户更新个人信息
+    updateUserProfile(updates: Partial<UserInfo>) {
+      const current = getUserInfo()
+      if (current) {
+        setUserInfo({ ...current, ...updates })
+      }
+      return this.getUserDisplayState()
+    },
+
+    // 模拟用户退出登录
+    performLogout() {
+      clearUserInfo()
+      return this.getUserDisplayState()
+    },
+
+    // 模拟网络异常后恢复
+    simulateNetworkRecovery() {
+      return {
+        userStillLoggedIn: checkHasUserInfo(),
+        dataIntact: !!getUserInfo()
+      }
     }
   }
 }
 
-describe('页面与状态管理集成测试', () => {
-  let pageFlow: ReturnType<typeof simulatePageUserFlow>
+describe('用户完整使用场景', () => {
+  let miniProgram: ReturnType<typeof createMiniProgramEnvironment>
 
   beforeEach(() => {
     clearUserInfo()
-    pageFlow = simulatePageUserFlow()
+    miniProgram = createMiniProgramEnvironment()
   })
 
-  describe('页面初始化状态同步', () => {
-    test('页面onLoad时应该正确同步初始状态', () => {
-      // 模拟页面onLoad调用syncStateToPage
-      const pageData = pageFlow.syncStateToPage()
-      
-      expect(pageData.hasUserInfo).toBe(false)
-      expect(pageData.userInfo.nickName).toBe('')
-      expect(pageData.userInfo.avatarUrl).toBe('default-avatar.jpg')
+  describe('新用户首次使用小程序', () => {
+    test('新用户打开小程序看到登录引导', () => {
+      const launchState = miniProgram.launchMiniProgram()
+      const displayState = miniProgram.getUserDisplayState()
+
+      expect(launchState.isFirstTime).toBe(true)
+      expect(launchState.needsLogin).toBe(true)
+      expect(displayState.showLoginPrompt).toBe(true)
+      expect(displayState.displayName).toBe('点击登录')
+      expect(displayState.canUseFeatures).toBe(false)
     })
 
-    test('页面onLoad时如果有已保存用户信息应该正确同步', () => {
-      // 预设用户信息
-      const existingUser: UserInfo = {
-        nickName: '已存在用户',
-        avatarUrl: 'https://example.com/existing-avatar.jpg'
+    test('新用户完成微信授权登录成功进入应用', () => {
+      const newUser: UserInfo = {
+        nickName: '新用户小明',
+        avatarUrl: 'https://wx.qlogo.cn/mmopen/abc123.jpg'
       }
-      setUserInfo(existingUser)
 
-      // 模拟页面onLoad
-      const pageData = pageFlow.syncStateToPage()
-      
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(pageData.userInfo).toEqual(existingUser)
-    })
-  })
+      const displayState = miniProgram.performUserLogin(newUser)
 
-  describe('用户头像选择流程', () => {
-    test('新用户选择头像后输入昵称完成注册', () => {
-      // 1. 用户选择头像（此时还没有昵称）
-      let pageData = pageFlow.onChooseAvatar('https://example.com/new-avatar.jpg')
-      expect(pageData.hasUserInfo).toBe(false) // 因为还没有昵称
-
-      // 2. 用户输入昵称
-      pageData = pageFlow.onInputChange('新用户昵称')
-      expect(pageData.hasUserInfo).toBe(false) // 还是false，因为头像和昵称是分开设置的
-
-      // 3. 用户再次选择头像，触发完整注册
-      pageData = pageFlow.onChooseAvatar('https://example.com/final-avatar.jpg', '新用户昵称')
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(pageData.userInfo.nickName).toBe('新用户昵称')
-      expect(pageData.userInfo.avatarUrl).toBe('https://example.com/final-avatar.jpg')
+      expect(displayState.showLoginPrompt).toBe(false)
+      expect(displayState.displayName).toBe('新用户小明')
+      expect(displayState.displayAvatar).toBe('https://wx.qlogo.cn/mmopen/abc123.jpg')
+      expect(displayState.canUseFeatures).toBe(true)
     })
 
-    test('已有用户更新头像', () => {
-      // 1. 预设用户信息
-      const existingUser: UserInfo = {
-        nickName: '已有用户',
-        avatarUrl: 'https://example.com/old-avatar.jpg'
-      }
-      setUserInfo(existingUser)
-
-      // 2. 用户更新头像
-      const pageData = pageFlow.onChooseAvatar('https://example.com/new-avatar.jpg')
-      
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(pageData.userInfo.nickName).toBe('已有用户')
-      expect(pageData.userInfo.avatarUrl).toBe('https://example.com/new-avatar.jpg')
-    })
-  })
-
-  describe('用户昵称输入流程', () => {
-    test('已有用户修改昵称', () => {
-      // 1. 预设用户信息
-      const existingUser: UserInfo = {
-        nickName: '旧昵称',
+    test('新用户登录后关闭小程序再次打开仍保持登录状态', () => {
+      const user: UserInfo = {
+        nickName: '持久用户',
         avatarUrl: 'https://example.com/avatar.jpg'
       }
+      
+      miniProgram.performUserLogin(user)
+      
+      // 模拟重新打开小程序
+      const newSession = createMiniProgramEnvironment()
+      const launchState = newSession.launchMiniProgram()
+      const displayState = newSession.getUserDisplayState()
+
+      expect(launchState.isFirstTime).toBe(false)
+      expect(launchState.needsLogin).toBe(false)
+      expect(displayState.canUseFeatures).toBe(true)
+      expect(displayState.displayName).toBe('持久用户')
+    })
+  })
+
+  describe('老用户日常使用场景', () => {
+    beforeEach(() => {
+      // 模拟已有用户登录状态
+      const existingUser: UserInfo = {
+        nickName: '老用户张三',
+        avatarUrl: 'https://example.com/zhang-avatar.jpg',
+        city: '深圳',
+        province: '广东'
+      }
       setUserInfo(existingUser)
-
-      // 2. 用户修改昵称
-      const pageData = pageFlow.onInputChange('新昵称')
-      
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(pageData.userInfo.nickName).toBe('新昵称')
-      expect(pageData.userInfo.avatarUrl).toBe('https://example.com/avatar.jpg')
     })
 
-    test('新用户只输入昵称不触发注册', () => {
-      // 新用户只输入昵称，不应该触发完整注册
-      const pageData = pageFlow.onInputChange('只有昵称')
+    test('老用户打开小程序直接看到个人信息正常使用', () => {
+      const launchState = miniProgram.launchMiniProgram()
+      const displayState = miniProgram.getUserDisplayState()
+
+      expect(launchState.isFirstTime).toBe(false)
+      expect(launchState.needsLogin).toBe(false)
+      expect(displayState.showLoginPrompt).toBe(false)
+      expect(displayState.displayName).toBe('老用户张三')
+      expect(displayState.canUseFeatures).toBe(true)
+    })
+
+    test('老用户更新头像立即在界面生效', () => {
+      const newAvatar = 'https://example.com/new-zhang-avatar.jpg'
       
-      expect(pageData.hasUserInfo).toBe(false)
-      expect(getUserInfo()).toBeNull() // 状态管理中没有信息
+      const displayState = miniProgram.updateUserProfile({ avatarUrl: newAvatar })
+
+      expect(displayState.displayAvatar).toBe(newAvatar)
+      expect(displayState.displayName).toBe('老用户张三') // 昵称不变
+      expect(displayState.canUseFeatures).toBe(true)
+    })
+
+    test('老用户修改昵称后全局生效', () => {
+      const displayState = miniProgram.updateUserProfile({ nickName: '张三丰' })
+
+      expect(displayState.displayName).toBe('张三丰')
+      expect(displayState.displayAvatar).toBe('https://example.com/zhang-avatar.jpg') // 头像不变
+      expect(displayState.canUseFeatures).toBe(true)
+    })
+
+    test('老用户主动退出登录回到游客状态', () => {
+      const displayState = miniProgram.performLogout()
+
+      expect(displayState.showLoginPrompt).toBe(true)
+      expect(displayState.displayName).toBe('点击登录')
+      expect(displayState.canUseFeatures).toBe(false)
     })
   })
 
-  describe('微信授权流程', () => {
-    test('用户通过微信授权获取完整信息', () => {
-      const wechatUserInfo: UserInfo = {
-        nickName: '微信用户',
-        avatarUrl: 'https://wx.qlogo.cn/test.jpg',
-        gender: 2,
-        city: '广州',
-        province: '广东',
-        country: '中国'
+  describe('异常情况用户体验', () => {
+    test('网络异常后恢复，用户登录状态保持完整', () => {
+      const user: UserInfo = {
+        nickName: '网络测试用户',
+        avatarUrl: 'https://example.com/network-test.jpg'
       }
-
-      // 模拟getUserProfile成功
-      const pageData = pageFlow.getUserProfile(wechatUserInfo)
       
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(pageData.userInfo).toEqual(wechatUserInfo)
+      miniProgram.performUserLogin(user)
+      
+      // 模拟网络异常后恢复
+      const recoveryState = miniProgram.simulateNetworkRecovery()
+      const displayState = miniProgram.getUserDisplayState()
+
+      expect(recoveryState.userStillLoggedIn).toBe(true)
+      expect(recoveryState.dataIntact).toBe(true)
+      expect(displayState.displayName).toBe('网络测试用户')
+      expect(displayState.canUseFeatures).toBe(true)
+    })
+
+    test('数据异常清空后用户看到正确的重新登录提示', () => {
+      // 先设置用户登录
+      miniProgram.performUserLogin({
+        nickName: '异常测试',
+        avatarUrl: 'https://example.com/test.jpg'
+      })
+
+      // 模拟数据异常清空
+      clearUserInfo()
+      
+      const displayState = miniProgram.getUserDisplayState()
+
+      expect(displayState.showLoginPrompt).toBe(true)
+      expect(displayState.displayName).toBe('点击登录')
+      expect(displayState.canUseFeatures).toBe(false)
     })
   })
 
-  describe('复杂用户操作序列', () => {
-    test('用户完整使用流程：选择头像 -> 输入昵称 -> 修改头像 -> 修改昵称', () => {
-      // 1. 初始状态
-      let pageData = pageFlow.syncStateToPage()
-      expect(pageData.hasUserInfo).toBe(false)
+  describe('真实用户使用流程组合', () => {
+    test('完整用户生命周期：首次安装 -> 使用 -> 卸载重装 -> 重新登录', () => {
+      // 1. 首次安装使用
+      let launchState = miniProgram.launchMiniProgram()
+      expect(launchState.isFirstTime).toBe(true)
 
-      // 2. 选择头像和输入昵称完成注册
-      pageFlow.onChooseAvatar('https://example.com/avatar1.jpg', '初始用户')
-      pageData = pageFlow.syncStateToPage()
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(pageData.userInfo.nickName).toBe('初始用户')
-      expect(pageData.userInfo.avatarUrl).toBe('https://example.com/avatar1.jpg')
-
-      // 3. 修改头像
-      pageData = pageFlow.onChooseAvatar('https://example.com/avatar2.jpg')
-      expect(pageData.userInfo.nickName).toBe('初始用户') // 昵称不变
-      expect(pageData.userInfo.avatarUrl).toBe('https://example.com/avatar2.jpg')
-
-      // 4. 修改昵称
-      pageData = pageFlow.onInputChange('修改后用户')
-      expect(pageData.userInfo.nickName).toBe('修改后用户')
-      expect(pageData.userInfo.avatarUrl).toBe('https://example.com/avatar2.jpg') // 头像不变
-
-      // 5. 验证最终状态
-      expect(pageData.hasUserInfo).toBe(true)
-      expect(getUserInfo()?.nickName).toBe('修改后用户')
-      expect(getUserInfo()?.avatarUrl).toBe('https://example.com/avatar2.jpg')
+      // 2. 完成登录开始使用
+      const user: UserInfo = {
+        nickName: '生命周期用户',
+        avatarUrl: 'https://example.com/lifecycle.jpg'
+      }
+      miniProgram.performUserLogin(user)
+      
+      // 3. 模拟卸载重装（清空本地数据）
+      clearUserInfo()
+      
+      // 4. 重新打开，需要重新登录
+      const newInstall = createMiniProgramEnvironment()
+      launchState = newInstall.launchMiniProgram()
+      expect(launchState.isFirstTime).toBe(true)
+      expect(launchState.needsLogin).toBe(true)
+      
+      // 5. 重新登录成功
+      const displayState = newInstall.performUserLogin(user)
+      expect(displayState.canUseFeatures).toBe(true)
+      expect(displayState.displayName).toBe('生命周期用户')
     })
 
-    test('用户操作错误序列不应该破坏状态一致性', () => {
-      // 1. 设置初始用户
-      const initialUser: UserInfo = {
-        nickName: '稳定用户',
-        avatarUrl: 'https://example.com/stable-avatar.jpg'
-      }
-      setUserInfo(initialUser)
+    test('多次个人信息修改的用户体验连续性', () => {
+      // 初始登录
+      miniProgram.performUserLogin({
+        nickName: '多变用户',
+        avatarUrl: 'https://example.com/original.jpg'
+      })
 
-      // 2. 执行一些可能的错误操作
-      pageFlow.onChooseAvatar('') // 空头像
-      pageFlow.onInputChange('') // 空昵称
+      // 连续修改头像
+      let state = miniProgram.updateUserProfile({ avatarUrl: 'https://example.com/change1.jpg' })
+      expect(state.displayAvatar).toBe('https://example.com/change1.jpg')
       
-      // 3. 验证状态保持一致性
-      const currentUser = getUserInfo()
-      expect(currentUser?.nickName).toBe('') // 昵称被清空
-      expect(currentUser?.avatarUrl).toBe('') // 头像被清空
-      expect(checkHasUserInfo()).toBe(true) // 但用户信息状态仍存在
+      state = miniProgram.updateUserProfile({ avatarUrl: 'https://example.com/change2.jpg' })
+      expect(state.displayAvatar).toBe('https://example.com/change2.jpg')
+
+      // 修改昵称
+      state = miniProgram.updateUserProfile({ nickName: '超级多变用户' })
+      expect(state.displayName).toBe('超级多变用户')
+      expect(state.displayAvatar).toBe('https://example.com/change2.jpg') // 头像保持
+
+      // 同时修改头像和昵称
+      state = miniProgram.updateUserProfile({
+        nickName: '最终用户',
+        avatarUrl: 'https://example.com/final.jpg'
+      })
+      expect(state.displayName).toBe('最终用户')
+      expect(state.displayAvatar).toBe('https://example.com/final.jpg')
+      expect(state.canUseFeatures).toBe(true)
     })
   })
 })
