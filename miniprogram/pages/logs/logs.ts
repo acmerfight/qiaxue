@@ -16,4 +16,8 @@ Page({
       }),
     })
   },
+  
+  onGoBack(): void {
+    wx.navigateBack()
+  },
 })

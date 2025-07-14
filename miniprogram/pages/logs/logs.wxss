@@ -1,16 +1,53 @@
+/**logs.wxss**/
 page {
+  height: 100vh;
+  background-color: #f7f8fa;
+}
+
+.page-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
 .scrollarea {
   flex: 1;
   overflow-y: hidden;
+  padding: 24rpx;
 }
-.log-item {
-  margin-top: 20rpx;
-  text-align: center;
+
+/* TDesign Cell Group 样式 */
+.t-cell-group {
+  margin-bottom: 24rpx;
 }
-.log-item:last-child {
+
+/* 空状态容器 */
+.empty-container {
+  margin-top: 200rpx;
+}
+
+/* 覆盖 TDesign 默认样式以保持原有风格 */
+.t-cell {
+  background-color: #ffffff;
+}
+
+.t-cell__title {
+  font-size: 28rpx;
+  color: #333333;
+  text-align: left;
+}
+
+/* 导航栏样式 */
+.t-navbar {
+  background-color: #ffffff !important;
+}
+
+.t-navbar__center {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+/* 安全区域适配 */
+.scrollarea {
   padding-bottom: env(safe-area-inset-bottom);
 }
