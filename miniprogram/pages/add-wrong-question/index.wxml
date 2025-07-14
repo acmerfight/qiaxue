@@ -1,46 +1,64 @@
-<view class="container">
-  <view class="form-card">
-    <!-- 错题内容 -->
-    <view class="form-item">
-      <view class="form-label">
-        错题内容 <text class="required">*</text>
+<view class="page-container">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar">
+    <view class="navbar-content">
+      <view class="navbar-left" bindtap="onBack">
+        <t-icon name="chevron-left" size="20" color="#1e293b" />
+        <text class="back-text">返回</text>
       </view>
-      <t-textarea
-        placeholder="请详细描述错题内容，包括题目、你的答案、正确答案等..."
-        value="{{formData.content}}"
-        bind:change="onContentInput"
-        maxlength="{{500}}"
-        bordered
-        indicator
-        t-class="custom-textarea {{validationErrors.content ? 'error' : ''}}"
-      />
-      <view class="error-message" wx:if="{{validationErrors.content}}">
-        {{validationErrors.content}}
-      </view>
-    </view>
-
-    <!-- 学科显示 -->
-    <view class="form-item">
-      <view class="form-label">学科</view>
-      <view class="subject-display">
-        <t-tag theme="primary" size="medium">数学</t-tag>
-      </view>
+      <view class="navbar-title">添加错题</view>
+      <view class="navbar-right"></view>
     </view>
   </view>
 
-  <!-- 提交按钮 -->
-  <view class="button-group">
-    <t-button
-      theme="primary"
-      size="large"
-      block
-      bind:tap="onSubmit"
-      loading="{{isLoading}}"
-      disabled="{{isLoading}}"
-      t-class="submit-button"
-    >
-      {{isLoading ? '保存中...' : '保存错题'}}
-    </t-button>
+  <!-- 页面内容 -->
+  <view class="content-container">
+    <view class="form-card">
+      <!-- 错题内容 -->
+      <view class="form-item">
+        <view class="form-label">
+          错题内容 <text class="required">*</text>
+        </view>
+        <view class="textarea-wrapper">
+          <t-textarea
+            placeholder="请详细描述错题内容，包括题目、你的答案、正确答案等..."
+            value="{{formData.content}}"
+            bind:change="onContentInput"
+            maxlength="{{500}}"
+            bordered
+            indicator
+            autosize="{{true}}"
+            t-class="custom-textarea {{validationErrors.content ? 'error' : ''}}"
+          />
+        </view>
+        <view class="error-message" wx:if="{{validationErrors.content}}">
+          {{validationErrors.content}}
+        </view>
+      </view>
+
+      <!-- 学科显示 -->
+      <view class="form-item">
+        <view class="form-label">学科</view>
+        <view class="subject-display">
+          <t-tag theme="primary" size="medium">数学</t-tag>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="button-group">
+      <t-button
+        theme="primary"
+        size="large"
+        block
+        bind:tap="onSubmit"
+        loading="{{isLoading}}"
+        disabled="{{isLoading}}"
+        t-class="submit-button"
+      >
+        {{isLoading ? '保存中...' : '保存错题'}}
+      </t-button>
+    </view>
   </view>
 
   <!-- Toast提示 -->

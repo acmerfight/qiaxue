@@ -39,6 +39,15 @@ Page({
     clearValidationErrors()
   },
 
+  /**
+   * 返回按钮点击处理
+   */
+  onBack(): void {
+    wx.navigateBack({
+      delta: 1
+    })
+  },
+
 
   /**
    * 绑定状态到页面数据
