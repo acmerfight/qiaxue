@@ -1,46 +1,49 @@
 <view class="container">
-  <form class="form" bindsubmit="onSubmit">
+  <view class="form-card">
     <!-- 错题内容 -->
-    <view class="form-group">
-      <view class="label">
+    <view class="form-item">
+      <view class="form-label">
         错题内容 <text class="required">*</text>
       </view>
-      <textarea 
-        class="textarea {{validationErrors.content ? 'error' : ''}}"
+      <t-textarea
         placeholder="请详细描述错题内容，包括题目、你的答案、正确答案等..."
         value="{{formData.content}}"
-        bindinput="onContentInput"
-        maxlength="500"
-        auto-height
+        bind:change="onContentInput"
+        maxlength="{{500}}"
+        bordered
+        indicator
+        t-class="custom-textarea {{validationErrors.content ? 'error' : ''}}"
       />
-      <view class="char-count {{validationErrors.content ? 'error' : ''}}">
-        {{formData.content.length}}/500
-      </view>
       <view class="error-message" wx:if="{{validationErrors.content}}">
         {{validationErrors.content}}
       </view>
     </view>
 
     <!-- 学科显示 -->
-    <view class="form-group">
-      <view class="label">
-        学科
-      </view>
+    <view class="form-item">
+      <view class="form-label">学科</view>
       <view class="subject-display">
-        <text class="subject-text">数学</text>
+        <t-tag theme="primary" size="medium">数学</t-tag>
       </view>
     </view>
+  </view>
 
+  <!-- 提交按钮 -->
+  <view class="button-group">
+    <t-button
+      theme="primary"
+      size="large"
+      block
+      bind:tap="onSubmit"
+      loading="{{isLoading}}"
+      disabled="{{isLoading}}"
+      t-class="submit-button"
+    >
+      {{isLoading ? '保存中...' : '保存错题'}}
+    </t-button>
+  </view>
 
-    <!-- 提交按钮 -->
-    <view class="button-group">
-      <button 
-        class="submit-button {{isLoading ? 'loading' : ''}}"
-        formType="submit"
-        disabled="{{isLoading}}"
-      >
-        {{isLoading ? '保存中...' : '保存错题'}}
-      </button>
-    </view>
-  </form>
+  <!-- Toast提示 -->
+  <t-toast id="t-toast" />
+  <t-message id="t-message" />
 </view>

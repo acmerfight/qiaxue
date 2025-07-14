@@ -58,7 +58,7 @@ Page({
   /**
    * 错题内容输入处理
    */
-  onContentInput(event: WechatMiniprogram.Input) {
+  onContentInput(event: any) {
     const content = event.detail.value
     this.setData({
       'formData.content': content
