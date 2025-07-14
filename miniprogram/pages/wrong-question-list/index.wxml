@@ -17,14 +17,16 @@
         <text>还没有错题记录</text>
         <text>开始记录你的错题，让学习更有针对性</text>
       </view>
-      <t-button 
-        theme="primary" 
-        size="large"
-        bindtap="onAddQuestion"
-        t-class="add-first-button"
-      >
-        添加第一道错题
-      </t-button>
+      <view slot="action" class="empty-action">
+        <t-button 
+          theme="primary" 
+          size="large"
+          bindtap="onAddQuestion"
+          t-class="add-first-button"
+        >
+          添加第一道错题
+        </t-button>
+      </view>
     </t-empty>
 
     <!-- 错题列表 -->

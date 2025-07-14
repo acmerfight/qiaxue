@@ -39,11 +39,19 @@
   font-weight: 600;
 }
 
+.empty-action {
+  margin-top: 32rpx;
+  display: flex;
+  justify-content: center;
+}
+
 .add-first-button {
   width: 280rpx !important;
   height: 80rpx !important;
   font-size: 28rpx !important;
   border-radius: 16rpx !important;
+  background-color: #1890ff !important;
+  color: #ffffff !important;
 }
 
 /* 列表样式 */
