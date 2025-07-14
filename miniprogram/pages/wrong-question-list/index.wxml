@@ -1,50 +1,71 @@
 <view class="container">
   <!-- 加载状态 -->
-  <view class="loading" wx:if="{{isLoading}}">
-    <view class="loading-icon">⌛</view>
-    <view class="loading-text">正在加载...</view>
-  </view>
+  <t-loading text="正在加载..." theme="circular" loading="{{isLoading}}" t-class="custom-loading">
+    <view slot="text" class="loading-text">正在加载...</view>
+  </t-loading>
 
-  <!-- 空状态 -->
-  <view class="empty-state" wx:elif="{{wrongQuestions.length === 0}}">
-    <view class="empty-icon">📝</view>
-    <view class="empty-title">还没有错题记录</view>
-    <view class="empty-description">
-      开始记录你的错题，让学习更有针对性
-    </view>
-    <button class="add-first-button" bindtap="onAddQuestion">
-      添加第一道错题
-    </button>
-  </view>
-
-  <!-- 错题列表 -->
-  <view class="question-list" wx:else>
-    <view 
-      class="question-item" 
-      wx:for="{{wrongQuestions}}" 
-      wx:key="id"
-      bindtap="onQuestionTap"
-      data-id="{{item.id}}"
+  <!-- 内容区域 -->
+  <view wx:if="{{!isLoading}}">
+    <!-- 空状态 -->
+    <t-empty 
+      wx:if="{{wrongQuestions.length === 0}}"
+      icon="info-circle"
+      description="还没有错题记录"
+      t-class="custom-empty"
     >
-      <view class="question-header">
-        <view class="question-tags">
-          <view class="tag subject">{{item.subjectName}}</view>
-        </view>
-        <view class="question-time">{{item.timeDisplay}}</view>
+      <view slot="description" class="empty-description">
+        <text>还没有错题记录</text>
+        <text>开始记录你的错题，让学习更有针对性</text>
       </view>
-      
-      <view class="question-content">
-        {{item.content}}
-      </view>
-      
-      <view class="question-footer">
-        <text class="view-detail">查看详情 →</text>
-      </view>
-    </view>
-  </view>
+      <t-button 
+        theme="primary" 
+        size="large"
+        bindtap="onAddQuestion"
+        t-class="add-first-button"
+      >
+        添加第一道错题
+      </t-button>
+    </t-empty>
 
-  <!-- 悬浮添加按钮 -->
-  <button class="fab" bindtap="onAddQuestion" wx:if="{{wrongQuestions.length > 0}}">
-    <text class="fab-icon">+</text>
-  </button>
+    <!-- 错题列表 -->
+    <view class="question-list" wx:else>
+      <t-cell-group theme="card">
+        <t-cell
+          wx:for="{{wrongQuestions}}"
+          wx:key="id"
+          hover
+          arrow
+          bindtap="onQuestionTap"
+          data-id="{{item.id}}"
+          t-class="question-cell"
+        >
+          <!-- 自定义标题区域 -->
+          <view slot="title" class="question-header">
+            <view class="question-tags">
+              <t-tag theme="primary" size="small">{{item.subjectName}}</t-tag>
+            </view>
+            <text class="question-time">{{item.timeDisplay}}</text>
+          </view>
+          
+          <!-- 自定义描述区域 -->
+          <view slot="description" class="question-content">
+            {{item.content}}
+          </view>
+          
+          <!-- 自定义右侧区域 -->
+          <view slot="note" class="view-detail">
+            查看详情
+          </view>
+        </t-cell>
+      </t-cell-group>
+    </view>
+
+    <!-- 悬浮添加按钮 -->
+    <t-fab 
+      wx:if="{{wrongQuestions.length > 0}}"
+      icon="add"
+      bindclick="onAddQuestion"
+      style="right: 40rpx; bottom: 40rpx;"
+    />
+  </view>
 </view>
