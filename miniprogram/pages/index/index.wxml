@@ -10,20 +10,38 @@
       <view class="userinfo">
         <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
           <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-            <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+            <t-avatar class="avatar" icon="user" image="{{userInfo.avatarUrl}}" size="80px" />
           </button>
           <view class="nickname-wrapper">
-            <text class="nickname-label">昵称</text>
-            <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
+            <t-input 
+              label="昵称" 
+              type="nickname" 
+              value="{{userInfo.nickName}}"
+              placeholder="请输入昵称" 
+              bind:change="onInputChange"
+              borderless
+            />
           </view>
         </block>
         <block wx:elif="{{!hasUserInfo}}">
-          <button wx:if="{{canIUseGetUserProfile}}" class="login-button" bindtap="getUserProfile">登录</button>
+          <t-button 
+            wx:if="{{canIUseGetUserProfile}}" 
+            theme="primary"
+            size="medium"
+            bindtap="getUserProfile"
+          >
+            登录
+          </t-button>
           <view wx:else class="version-tip">请使用2.10.4及以上版本基础库</view>
         </block>
         <block wx:else>
           <view class="user-profile">
-            <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+            <t-avatar 
+              bindtap="bindViewTap" 
+              class="userinfo-avatar" 
+              image="{{userInfo.avatarUrl}}" 
+              size="80px"
+            />
             <text class="userinfo-nickname">{{userInfo.nickName}}</text>
           </view>
         </block>
@@ -32,10 +50,18 @@
     
     <!-- 功能入口 -->
     <view class="features">
-      <button class="feature-button" bindtap="goToWrongQuestions">
-        <view class="button-icon">📝</view>
-        <view class="button-text">我的错题本</view>
-      </button>
+      <t-button 
+        class="feature-button" 
+        theme="light"
+        size="extra-large"
+        block
+        bindtap="goToWrongQuestions"
+      >
+        <view class="button-content">
+          <view class="button-icon">📝</view>
+          <view class="button-text">我的错题本</view>
+        </view>
+      </t-button>
     </view>
     
     <view class="usermotto">

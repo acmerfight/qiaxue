@@ -26,12 +26,7 @@ page {
 }
 
 .userinfo-avatar {
-  overflow: hidden;
-  width: 80rpx;
-  height: 80rpx;
   margin: 0 0 16rpx 0;
-  border-radius: 50%;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .userinfo-nickname {
@@ -53,54 +48,44 @@ page {
 
 .avatar-wrapper {
   padding: 0;
-  width: 80rpx !important;
-  height: 80rpx !important;
-  border-radius: 40rpx;
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 40px;
   margin: 0 0 16rpx 0;
   background: transparent;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.avatar-wrapper::after {
+  display: none;
 }
 
 .avatar {
   display: block;
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 40rpx;
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
 }
 
 .nickname-wrapper {
-  display: flex;
   width: 480rpx;
-  padding: 16rpx 24rpx;
-  box-sizing: border-box;
-  border: 1rpx solid #e2e8f0;
-  color: #334155;
-  background: #ffffff;
-  border-radius: 12rpx;
   margin: 16rpx 0;
 }
 
-.nickname-label {
+.nickname-wrapper .t-input {
+  background: #ffffff;
+  border-radius: 12rpx;
+  border: 1rpx solid #e2e8f0;
+}
+
+.nickname-wrapper .t-input__label {
   width: 80rpx;
   font-weight: 500;
   font-size: 28rpx;
 }
 
-.nickname-input {
-  flex: 1;
-  color: #334155;
+.nickname-wrapper .t-input__wrap {
   font-size: 28rpx;
-}
-
-.login-button {
-  background: #1890ff;
-  color: white;
-  border-radius: 12rpx;
-  padding: 16rpx 32rpx;
-  font-size: 28rpx;
-  font-weight: 500;
-  border: none;
-  margin-top: 16rpx;
 }
 
 .version-tip {
@@ -137,37 +122,34 @@ page {
 .features {
   padding: 0 40rpx;
   margin-bottom: 80rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .feature-button {
-  width: 480rpx;
-  background: #ffffff;
-  color: #1e293b;
-  border-radius: 16rpx;
-  height: 120rpx;
-  font-size: 32rpx;
-  font-weight: 600;
-  border: 1rpx solid #e2e8f0;
-  margin: 0 auto;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  letter-spacing: 0.5rpx;
-  transform: translateY(0);
+  width: 100% !important;
+  height: 120rpx !important;
+  border-radius: 16rpx !important;
+  background: #ffffff !important;
+  border: 1rpx solid #e2e8f0 !important;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04) !important;
   transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  padding: 24rpx;
+}
+
+.feature-button::after {
+  display: none;
 }
 
 .feature-button:active {
   transform: translateY(2rpx);
-  box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.08);
-  background: #f8fafc;
+  box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.08) !important;
+  background: #f8fafc !important;
+}
+
+.button-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .button-icon {
@@ -179,4 +161,21 @@ page {
   font-size: 28rpx;
   font-weight: 600;
   color: #334155;
+  letter-spacing: 0.5rpx;
+}
+
+/* TDesign组件样式覆盖 */
+.t-button--primary {
+  background-color: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+.t-button--primary:active {
+  background-color: #096dd9 !important;
+  border-color: #096dd9 !important;
+}
+
+.t-button--text-medium {
+  font-size: 28rpx !important;
+  font-weight: 500 !important;
 }
